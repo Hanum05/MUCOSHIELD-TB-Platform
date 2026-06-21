@@ -27,7 +27,7 @@
                         phyto: {
                             50: '#fefce8', // Soft warm yellow bg
                             100: '#fef9c3',
-                            500: '#eab308', // Gold Yellow (representing Sembung/Sirih essence)
+                            500: '#eab308', // Gold Yellow
                             600: '#ca8a04',
                             800: '#854d0e',
                         },
@@ -63,6 +63,25 @@
             0% { top: 0%; }
             50% { top: 100%; }
             100% { top: 0%; }
+        }
+        /* Printable invoice / referral styling */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printable-referral-letter, #printable-referral-letter * {
+                visibility: visible;
+            }
+            #printable-referral-letter {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                border: none !important;
+                box-shadow: none !important;
+                background: white !important;
+                color: black !important;
+            }
         }
     </style>
 </head>
@@ -109,8 +128,14 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
                         <div>
-                            <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">Asal Daerah (Kab/Kota)</label>
-                            <input type="text" id="reg-region" required placeholder="Contoh: Malang" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-3 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                            <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">Asal Daerah (Kota/Kab)</label>
+                            <select id="reg-region" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-3 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                                <option value="Malang">Malang</option>
+                                <option value="Surabaya">Surabaya</option>
+                                <option value="Jakarta">Jakarta</option>
+                                <option value="Yogyakarta">Yogyakarta</option>
+                                <option value="Bandung">Bandung</option>
+                            </select>
                         </div>
                         <div>
                             <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">Tinggi Badan (cm)</label>
@@ -208,7 +233,7 @@
                 <a href="#reminders" class="hover:text-brand-600 transition-colors">TB Reminders</a>
                 <a href="#adherence" class="hover:text-brand-600 transition-colors">Progress</a>
                 <a href="#nutrisi" class="hover:text-brand-600 transition-colors">Nutrition</a>
-                <a href="#prediction" class="hover:text-brand-600 transition-colors">TB Predict</a>
+                <a href="#prediction" class="hover:text-brand-600 transition-colors">Sputum Guard</a>
                 <a href="#community" class="hover:text-brand-600 transition-colors">Community</a>
                 <a href="#referrals" class="hover:text-brand-700 transition-colors bg-brand-100 text-brand-900 px-3 py-1.5 rounded-lg border-2 border-brand-200">Referral</a>
             </nav>
@@ -232,7 +257,7 @@
             <a href="#reminders" class="block px-3 py-2.5 rounded-lg text-sm text-slate-950 hover:bg-brand-50 font-black">TB Reminders</a>
             <a href="#adherence" class="block px-3 py-2.5 rounded-lg text-sm text-slate-950 hover:bg-brand-50 font-black">Progress Score</a>
             <a href="#nutrisi" class="block px-3 py-2.5 rounded-lg text-sm text-slate-950 hover:bg-brand-50 font-black">Nutrition Risk</a>
-            <a href="#prediction" class="block px-3 py-2.5 rounded-lg text-sm text-slate-950 hover:bg-brand-50 font-black">TB Predict</a>
+            <a href="#prediction" class="block px-3 py-2.5 rounded-lg text-sm text-slate-950 hover:bg-brand-50 font-black">Sputum Guard</a>
             <a href="#community" class="block px-3 py-2.5 rounded-lg text-sm text-slate-950 hover:bg-brand-50 font-black">Community Health</a>
             <a href="#referrals" class="block px-3 py-2.5 rounded-lg text-sm text-brand-900 bg-brand-50 border-2 border-brand-200 font-black">Smart Referral</a>
         </div>
@@ -254,7 +279,7 @@
                     <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
                         <span class="inline-flex items-center space-x-1.5 bg-brand-100 border-2 border-brand-300 text-brand-800 text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider">
                             <i data-lucide="heart" class="w-4 h-4 text-brand-600"></i>
-                            <span id="welcome-user-text" class="text-brand-900">Memuat Sistem Pelayanan Kesehatan...</span>
+                            <span id="welcome-user-text" class="text-brand-900 font-black">Memuat Sistem Pelayanan Kesehatan...</span>
                         </span>
                         <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-none text-slate-950 uppercase">
                             Smart Mucoadhesive <span class="bg-gradient-to-r from-brand-600 to-phyto-500 bg-clip-text text-transparent">PHYTOMOUTHWASH</span>
@@ -273,23 +298,23 @@
                         </div>
                     </div>
 
-                    <!-- Right Hero Visual Panel (WHO TB Quote) -->
+                    <!-- Right Hero Visual Panel (John Green TB Quote) -->
                     <div class="lg:col-span-5 space-y-6">
                         <!-- Inspiring Tuberculosis Quote Card -->
                         <div class="glass-card rounded-2xl p-6 border-l-4 border-l-brand-500 relative overflow-hidden shadow-md bg-white">
                             <i data-lucide="quote" class="w-10 h-10 text-brand-500/15 absolute top-4 right-4"></i>
                             
                             <p class="text-xs sm:text-sm text-slate-950 italic leading-relaxed font-black">
-                                "Tuberculosis is both a cause and a consequence of poverty."<br>
-                                <span class="text-[11px] block mt-2 text-brand-700 not-italic">("Tuberkulosis adalah penyebab sekaligus akibat dari kemiskinan.")</span>
+                                "A preventable, curable infectious disease remains our deadliest."<br>
+                                <span class="text-xs block mt-2 text-brand-700 not-italic font-black">("Penyakit menular yang sebenarnya dapat dicegah dan disembuhkan masih menjadi penyakit yang paling mematikan.")</span>
                             </p>
                             <div class="mt-4 flex items-center gap-3">
                                 <div class="w-8 h-8 bg-gradient-to-tr from-brand-600 to-phyto-500 rounded-full flex items-center justify-center text-white font-black text-[10px] shadow">
-                                    WHO
+                                    JG
                                 </div>
                                 <div>
-                                    <h4 class="text-xs font-black uppercase tracking-wider text-slate-950">World Health Organization</h4>
-                                    <p class="text-[9px] text-brand-700 font-black">Global Health Determinant & Social Advocacy</p>
+                                    <h4 class="text-xs font-black uppercase tracking-wider text-slate-950">John Green</h4>
+                                    <p class="text-[9px] text-brand-700 font-black">Novelist & Global Health Advocate</p>
                                 </div>
                             </div>
                         </div>
@@ -419,12 +444,12 @@
             </div>
         </section>
 
-        <!-- Feature 1: AI Oral Thrush Risk Screening -->
+        <!-- AI Oral Thrush Risk Screening -->
         <section id="skrining" class="py-16 bg-white border-t-2 border-brand-100">
             <div class="max-w-6xl mx-auto px-4 sm:px-6">
                 <div class="text-center max-w-3xl mx-auto mb-12">
                     <span class="bg-brand-100 border-2 border-brand-200 text-brand-700 text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider">
-                        Fitur 1 • AI Adaptive Assessment
+                        AI Adaptive Assessment
                     </span>
                     <h2 class="text-3xl font-black text-brand-950 mt-4 uppercase">AI Oral Thrush Risk Screening</h2>
                     <p class="text-slate-950 mt-2 text-xs sm:text-sm font-bold">
@@ -568,16 +593,16 @@
             </div>
         </section>
 
-        <!-- Feature 2: Dynamic pH Indicator Technology -->
+        <!-- Dynamic pH Indicator Technology -->
         <section id="indicator" class="py-16 bg-brand-50/20 border-t-2 border-brand-100">
             <div class="max-w-6xl mx-auto px-4 sm:px-6">
                 <div class="text-center max-w-3xl mx-auto mb-12">
                     <span class="bg-brand-100 border-2 border-brand-200 text-brand-700 text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider">
-                        Fitur 2 • pH Chromic Formulation
+                        pH Chromic Formulation
                     </span>
                     <h2 class="text-3xl font-black text-brand-950 mt-4 uppercase">Dynamic pH Indicator Technology</h2>
                     <p class="text-slate-950 mt-2 text-xs sm:text-sm font-bold">
-                        Inovasi sediaan *mouthwash* yang sensitif terhadap perubahan pH air liur Anda. Warna limbah kumur dapat berubah sebagai pengingat tingkat keasaman yang mendukung perkembangbiakan jamur Candida.
+                        Inovasi sediaan *mouthwash* yang sensitif terhadap perubahan pH air liur Anda. Warna sediaan kumur dapat berubah sebagai indikator tingkat keasaman yang mendukung perkembangbiakan jamur Candida.
                     </p>
                 </div>
 
@@ -650,12 +675,12 @@
             </div>
         </section>
 
-        <!-- Feature 3: Oral Thrush Self-Assessment -->
+        <!-- Oral Thrush Self-Assessment -->
         <section id="assessment" class="py-16 bg-white border-t-2 border-brand-100">
             <div class="max-w-4xl mx-auto px-4 sm:px-6">
                 <div class="text-center mb-12">
                     <span class="bg-brand-100 border-2 border-brand-200 text-brand-700 text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider">
-                        Fitur 3 • Daily Symptom Tracker
+                        Daily Symptom Tracker
                     </span>
                     <h2 class="text-3xl font-black text-brand-950 mt-4 uppercase">Oral Thrush Self-Assessment</h2>
                     <p class="text-slate-950 mt-2 text-xs sm:text-sm font-bold">
@@ -792,12 +817,12 @@
             </div>
         </section>
 
-        <!-- Feature 4: Smart Oral Photo Screening -->
+        <!-- Smart Oral Photo Screening -->
         <section id="photo-scan" class="py-16 bg-brand-50/20 border-t-2 border-brand-100">
             <div class="max-w-6xl mx-auto px-4 sm:px-6">
                 <div class="text-center max-w-3xl mx-auto mb-12">
                     <span class="bg-brand-100 border-2 border-brand-200 text-brand-700 text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider">
-                        Fitur 4 • AI Computer Vision Simulation
+                        AI Computer Vision Simulation
                     </span>
                     <h2 class="text-3xl font-black text-brand-950 mt-4 uppercase">Smart Oral Photo Screening</h2>
                     <p class="text-slate-950 mt-2 text-xs sm:text-sm font-bold">
@@ -815,13 +840,13 @@
 
                         <!-- Sample presets for high utility -->
                         <div class="grid grid-cols-3 gap-2.5">
-                            <button onclick="selectPhotoSample('sehat')" class="p-2 border-2 border-brand-200 hover:border-phyto-500 rounded-xl bg-brand-50 text-[10px] font-black uppercase text-brand-900 transition-all">
+                            <button onclick="selectPhotoSample('sehat')" class="p-2 border-2 border-brand-200 hover:border-phyto-500 rounded-xl bg-brand-50 text-[10px] font-black uppercase text-brand-900 transition-all text-center">
                                 🟢 Lidah Normal
                             </button>
-                            <button onclick="selectPhotoSample('thrush')" class="p-2 border-2 border-brand-200 hover:border-danger-500 rounded-xl bg-brand-50 text-[10px] font-black uppercase text-brand-900 transition-all">
+                            <button onclick="selectPhotoSample('thrush')" class="p-2 border-2 border-brand-200 hover:border-danger-500 rounded-xl bg-brand-50 text-[10px] font-black uppercase text-brand-900 transition-all text-center">
                                 🔴 Candidiasis Akut
                             </button>
-                            <button onclick="selectPhotoSample('radang')" class="p-2 border-2 border-brand-200 hover:border-warning-500 rounded-xl bg-brand-50 text-[10px] font-black uppercase text-brand-900 transition-all">
+                            <button onclick="selectPhotoSample('radang')" class="p-2 border-2 border-brand-200 hover:border-warning-500 rounded-xl bg-brand-50 text-[10px] font-black uppercase text-brand-900 transition-all text-center">
                                 🟡 Inflamasi Ringan
                             </button>
                         </div>
@@ -883,12 +908,12 @@
             </div>
         </section>
 
-        <!-- Feature 5: TB Care Reminder & Alarm System -->
+        <!-- TB Care Reminder -->
         <section id="reminders" class="py-16 bg-white border-t-2 border-brand-100">
             <div class="max-w-4xl mx-auto px-4 sm:px-6">
                 <div class="text-center mb-12">
                     <span class="bg-brand-100 border-2 border-brand-200 text-brand-700 text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider">
-                        Fitur 5 • Medication & Inhalation Reminders
+                        Medication & Inhalation Reminders
                     </span>
                     <h2 class="text-3xl font-black text-brand-950 mt-4 uppercase">TB Care Reminder & Alarm Warning</h2>
                     <p class="text-slate-950 mt-2 text-xs sm:text-sm font-bold">
@@ -900,7 +925,7 @@
                     <!-- Alarm Controller Box -->
                     <div class="md:col-span-4 glass-card rounded-2xl p-6 border-2 border-brand-200 bg-white shadow-md text-center space-y-4">
                         <div class="w-12 h-12 bg-brand-500/10 text-brand-600 rounded-full flex items-center justify-center mx-auto shadow-sm">
-                            <i data-lucide="alarm-clock" class="w-6 h-6 animate-swing"></i>
+                            <i data-lucide="alarm-clock" class="w-6 h-6"></i>
                         </div>
                         <h4 class="font-black text-sm text-slate-950 uppercase">Alarm Warning Center</h4>
                         
@@ -930,25 +955,25 @@
                         <div class="space-y-3" id="reminders-checklist-container">
                             <label class="flex items-center p-3 rounded-xl bg-brand-50 border-2 border-brand-200 hover:border-brand-300 transition-all cursor-pointer">
                                 <input type="checkbox" id="check-oat" onchange="updateAdherenceScore()" class="w-4 h-4 rounded text-brand-600 bg-white border-brand-400 focus:ring-brand-500">
-                                <div class="ml-3 text-xs text-slate-950 font-bold">
+                                <div class="ml-3 text-xs text-slate-950 font-bold text-left">
                                     <strong>Minum OAT (Obat Anti Tuberkulosis)</strong> - Konsumsi rutin pagi/malam sesuai petunjuk
                                 </div>
                             </label>
                             <label class="flex items-center p-3 rounded-xl bg-brand-50 border-2 border-brand-200 hover:border-brand-300 transition-all cursor-pointer">
                                 <input type="checkbox" id="check-inhaler" onchange="updateAdherenceScore()" class="w-4 h-4 rounded text-brand-600 bg-white border-brand-400 focus:ring-brand-500">
-                                <div class="ml-3 text-xs text-slate-950 font-bold">
+                                <div class="ml-3 text-xs text-slate-950 font-bold text-left">
                                     <strong>Penggunaan Inhaler Terapi</strong> - Hirup obat steroid sesuai petunjuk dokter paru
                                 </div>
                             </label>
                             <label class="flex items-center p-3 rounded-xl bg-brand-50 border-2 border-brand-200 hover:border-brand-300 transition-all cursor-pointer">
                                 <input type="checkbox" id="check-gargle" onchange="updateAdherenceScore()" class="w-4 h-4 rounded text-brand-600 bg-white border-brand-400 focus:ring-brand-500">
-                                <div class="ml-3 text-xs text-slate-950 font-bold">
+                                <div class="ml-3 text-xs text-slate-950 font-bold text-left">
                                     <strong>Berkumur Dengan Mucoshield-TB</strong> - Bersihkan sisa deposit steroid pasca inhalasi
                                 </div>
                             </label>
                             <label class="flex items-center p-3 rounded-xl bg-brand-50 border-2 border-brand-200 hover:border-brand-300 transition-all cursor-pointer">
                                 <input type="checkbox" id="check-monitor" onchange="updateAdherenceScore()" class="w-4 h-4 rounded text-brand-600 bg-white border-brand-400 focus:ring-brand-500">
-                                <div class="ml-3 text-xs text-slate-950 font-bold">
+                                <div class="ml-3 text-xs text-slate-950 font-bold text-left">
                                     <strong>Pengisian Monitoring Harian</strong> - Dokumentasikan keluhan sariawan/lidah putih Anda
                                 </div>
                             </label>
@@ -980,12 +1005,12 @@
             </div>
         </div>
 
-        <!-- Feature 6: Adherence Score Dashboard -->
+        <!-- Adherence Score Dashboard -->
         <section id="adherence" class="py-16 bg-brand-50/20 border-t-2 border-brand-100">
             <div class="max-w-4xl mx-auto px-4 sm:px-6">
                 <div class="text-center mb-12">
                     <span class="bg-brand-100 border-2 border-brand-200 text-brand-700 text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider">
-                        Fitur 6 • Real-Time Tracking Score
+                        Real-Time Tracking Score
                     </span>
                     <h2 class="text-3xl font-black text-brand-950 mt-4 uppercase">Adherence Score Dashboard</h2>
                     <p class="text-slate-950 mt-2 text-xs sm:text-sm font-bold">
@@ -1026,12 +1051,12 @@
             </div>
         </section>
 
-        <!-- Feature 7: Nutritional Risk Screening -->
+        <!-- Nutritional Risk Screening -->
         <section id="nutrisi" class="py-16 bg-white border-t-2 border-brand-100">
             <div class="max-w-6xl mx-auto px-4 sm:px-6">
                 <div class="text-center max-w-3xl mx-auto mb-12">
                     <span class="bg-brand-100 border-2 border-brand-200 text-brand-700 text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider">
-                        Fitur 7 • Malnutrition Screening Module
+                        Malnutrition Screening Module
                     </span>
                     <h2 class="text-3xl font-black text-brand-950 mt-4 uppercase">Nutritional Risk Screening</h2>
                     <p class="text-slate-950 mt-2 text-xs sm:text-sm font-bold">
@@ -1118,167 +1143,420 @@
             </div>
         </section>
 
-        <!-- Feature 8: TB Recovery Prediction Index -->
+        <!-- Sputum Visual Analysis & Pulmonary Defense Monitor -->
         <section id="prediction" class="py-16 bg-brand-50/20 border-t-2 border-brand-100">
             <div class="max-w-4xl mx-auto px-4 sm:px-6">
                 <div class="text-center mb-12">
                     <span class="bg-brand-100 border-2 border-brand-200 text-brand-700 text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider">
-                        Fitur 8 • Integrated Clinical Prognosis
+                        Pulmonary-Mucosal Synergy Analysis
                     </span>
-                    <h2 class="text-3xl font-black text-brand-950 mt-4 uppercase">TB Recovery Prediction Index</h2>
+                    <h2 class="text-3xl font-black text-brand-950 mt-4 uppercase">Sputum Visual Analysis & Pulmonary Defense Monitor</h2>
                     <p class="text-slate-950 mt-2 text-xs sm:text-sm font-bold">
-                        Sistem memproyeksikan indeks peluang keberhasilan terapi penyembuhan tuberkulosis Anda dengan menggabungkan tingkat kepatuhan minum OAT, risiko oral thrush, dan status nutrisi harian.
-                    </p>
-                </div>
-
-                <div class="glass-card rounded-2xl p-6 sm:p-10 border-2 border-brand-200 bg-white shadow-xl space-y-6 text-center">
-                    <button onclick="calculateRecoveryIndex()" class="bg-gradient-to-r from-brand-600 to-phyto-500 hover:from-brand-700 hover:to-phyto-600 text-white font-black uppercase text-xs tracking-widest px-8 py-3.5 rounded-xl shadow-md transition-all">
-                        Simulasikan Peluang Keberhasilan Penyembuhan TB
-                    </button>
-
-                    <div id="recovery-result-panel" class="hidden space-y-4 pt-4 border-t-2 border-brand-100">
-                        <div class="max-w-xs mx-auto">
-                            <span class="text-[9px] font-black uppercase tracking-widest text-brand-600 block mb-1">Indeks Peluang Sembuh</span>
-                            <div class="text-4xl font-black text-slate-950" id="recovery-score-display">0%</div>
-                            <span id="recovery-status-badge" class="text-[10px] font-black px-2.5 py-0.5 rounded-full text-white bg-slate-400 uppercase block mt-1.5 w-fit mx-auto">Rendah</span>
-                        </div>
-                        <p class="text-xs text-slate-950 font-bold leading-relaxed max-w-md mx-auto" id="recovery-desc-text">
-                            Tingkatkan kepatuhan penggunaan inhaler dan phytomouthwash Mucoshield-TB Anda untuk menaikkan skor peluang kesembuhan paru Anda secara optimal.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Feature 9: Community Health Monitoring -->
-        <section id="community" class="py-16 bg-white border-t-2 border-brand-100">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6">
-                <div class="text-center max-w-3xl mx-auto mb-12">
-                    <span class="bg-brand-100 border-2 border-brand-200 text-brand-700 text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider">
-                        Fitur 9 • Puskesmas Dashboard Monitoring
-                    </span>
-                    <h2 class="text-3xl font-black text-brand-950 mt-4 uppercase">Community Health Monitoring</h2>
-                    <p class="text-slate-950 mt-2 text-xs sm:text-sm font-bold">
-                        Data pemantauan anonim pasien TBC dan oral thrush di wilayah setempat dikompilasi secara *real-time* untuk membantu petugas puskesmas dan fasilitas kesehatan merancang intervensi yang presisi.
-                    </p>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    <!-- Community Stats Panel -->
-                    <div class="lg:col-span-4 glass-card rounded-2xl p-6 border-2 border-brand-200 bg-white shadow-md space-y-4">
-                        <h3 class="font-black text-xs text-slate-950 uppercase flex items-center gap-1.5 pb-2 border-b-2 border-brand-100">
-                            <i data-lucide="bar-chart" class="text-brand-500"></i>
-                            Metrik Sebaran Wilayah
-                        </h3>
-                        <div class="space-y-3 text-xs">
-                            <div class="flex justify-between">
-                                <span class="text-brand-700 font-bold">Kasus Berisiko Tinggi Thrush</span>
-                                <strong class="text-danger-500 font-black">142 Pasien</strong>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-brand-700 font-bold">Total Kepatuhan Rata-rata</span>
-                                <strong class="text-brand-600 font-black">82.4%</strong>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-brand-700 font-bold">Pasien Terbebas Oral Thrush</span>
-                                <strong class="text-phyto-600 font-black">391 Pasien</strong>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Healthy Community Support Pledge & Registration -->
-                    <div class="lg:col-span-4 glass-card rounded-2xl p-6 border-2 border-brand-200 bg-white shadow-md space-y-4">
-                        <h3 class="font-black text-xs text-slate-950 uppercase flex items-center gap-1.5 pb-2 border-b-2 border-brand-100">
-                            <i data-lucide="heart-handshake" class="text-brand-600"></i>
-                            Komunitas Sehat Tuntas TBC (KST-TBC)
-                        </h3>
-                        <p class="text-[10px] text-slate-950 font-bold leading-relaxed">
-                            Maju bersama menghadapi Tuberkulosis! Daftarkan diri Anda ke jejaring pendamping sebaya nasional untuk saling mendukung kesembuhan terapi parumu tanpa relaps.
-                        </p>
-                        
-                        <!-- Community Pledge Form -->
-                        <form onsubmit="submitCommunityPledge(event)" class="space-y-2.5">
-                            <input type="text" id="pledge-school" required placeholder="Nama Sekolah / Institusi..." class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-3 py-2 text-xs text-slate-950 font-black outline-none">
-                            <input type="text" id="pledge-vision" required placeholder="Slogan / Ikrar Semangatmu..." class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-3 py-2 text-xs text-slate-950 font-black outline-none">
-                            <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-black text-[10px] uppercase py-2 rounded-xl transition-all">
-                                Kirim Ikrar & Bergabung Jejaring
-                            </button>
-                        </form>
-
-                        <!-- Community Pledge Card -->
-                        <div id="community-badge" class="hidden bg-gradient-to-tr from-brand-900 to-brand-950 text-white p-4 rounded-xl text-center space-y-2 border-2 border-brand-500 relative overflow-hidden">
-                            <span class="text-[8px] bg-brand-500 text-white font-black px-2 py-0.5 rounded-full uppercase tracking-widest block mx-auto w-fit">KST-TBC Terdaftar</span>
-                            <h4 id="pledge-card-name" class="font-black text-xs uppercase text-white"></h4>
-                            <p id="pledge-card-school" class="text-[9px] text-brand-100 font-black"></p>
-                            <p id="pledge-card-text" class="text-[9px] text-white italic font-bold"></p>
-                        </div>
-                    </div>
-
-                    <!-- Youtube Webinar & Podcast Hub -->
-                    <div class="lg:col-span-4 glass-card rounded-2xl p-6 border-2 border-brand-200 bg-white shadow-md space-y-4">
-                        <h3 class="font-black text-xs text-slate-950 uppercase flex items-center gap-1.5 pb-2 border-b-2 border-brand-100">
-                            <i data-lucide="video" class="text-brand-500 animate-pulse"></i>
-                            Webinar & Podcast Player
-                        </h3>
-                        
-                        <!-- Video simulator box -->
-                        <div class="bg-black text-white rounded-xl overflow-hidden aspect-video relative group border-2 border-brand-200">
-                            <img id="webinar-thumb" src="https://placehold.co/640x360/ea580c/ffffff?text=Webinar+Tuberkulosis+dan+Oral+Thrush" alt="Video" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-brand-950/40 flex flex-col justify-between p-3">
-                                <span class="bg-red-600 text-[8px] font-black px-2 py-0.5 rounded text-white w-fit">SIMULATOR YouTube</span>
-                                <button onclick="toggleWebinarSimulation()" class="w-10 h-10 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center mx-auto shadow-lg">
-                                    <i id="webinar-play-btn" data-lucide="play" class="w-5 h-5 fill-white"></i>
-                                </button>
-                                <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded truncate text-brand-100 font-black">Penatapan Higienitas Inhaler Tuberkulosis</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Feature 10: Smart Referral System -->
-        <section id="referrals" class="py-16 bg-brand-50/20 border-t-2 border-brand-100">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6">
-                <div class="text-center mb-12">
-                    <span class="bg-brand-100 border-2 border-brand-200 text-brand-700 text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider">
-                        Fitur 10 • Smart Clinical Referrals
-                    </span>
-                    <h2 class="text-3xl font-black text-brand-950 mt-4 uppercase">Smart Referral System</h2>
-                    <p class="text-slate-950 mt-2 text-xs sm:text-sm font-bold">
-                        Sistem rujukan pintar yang mendeteksi indikator kritis kesehatan pasien untuk menghasilkan rekomendasi rujukan faskes secara instan demi pencegahan komplikasi klinis.
+                        Monitor kondisi sputum (dahak) dan intensitas batuk Anda untuk melacak efektivitas sistem pertahanan paru-paru dan mukosa dari infeksi sekunder secara real-time.
                     </p>
                 </div>
 
                 <div class="glass-card rounded-2xl p-6 sm:p-10 border-2 border-brand-200 bg-white shadow-xl space-y-6">
-                    <button onclick="checkClinicalReferral()" class="w-full bg-gradient-to-r from-brand-600 to-phyto-500 hover:from-brand-700 hover:to-phyto-600 text-white font-black uppercase text-xs tracking-widest py-3.5 rounded-xl shadow-md transition-all">
-                        Periksa Status Rujukan Medis Saya
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Left: Sputum Selector & Cough Inputs -->
+                        <div class="space-y-4 text-left">
+                            <h4 class="font-black text-xs text-brand-800 uppercase tracking-wider">Pilih Karakteristik Sputum (Dahak)</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="selectSputumPattern('berdarah')" class="p-2.5 border-2 border-brand-200 hover:border-danger-500 rounded-xl bg-brand-50 text-[10px] font-black uppercase text-brand-900 transition-all text-left">
+                                    🔴 Bercak Darah (Hemoptisis)
+                                </button>
+                                <button onclick="selectSputumPattern('purulen')" class="p-2.5 border-2 border-brand-200 hover:border-warning-500 rounded-xl bg-brand-50 text-[10px] font-black uppercase text-brand-900 transition-all text-left">
+                                    🟡 Kuning/Hijau Pekat
+                                </button>
+                                <button onclick="selectSputumPattern('mukoid')" class="p-2.5 border-2 border-brand-200 hover:border-brand-500 rounded-xl bg-brand-50 text-[10px] font-black uppercase text-brand-900 transition-all text-left">
+                                    🟠 Putih Kental/Lengket
+                                </button>
+                                <button onclick="selectSputumPattern('jernih')" class="p-2.5 border-2 border-brand-200 hover:border-phyto-500 rounded-xl bg-brand-50 text-[10px] font-black uppercase text-brand-900 transition-all text-left">
+                                    🟢 Jernih/Encer
+                                </button>
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">Durasi Batuk Berdahak (Minggu)</label>
+                                <input type="number" id="sputum-cough-weeks" min="0" max="24" value="2" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-3 py-2 text-xs text-slate-950 font-black outline-none">
+                            </div>
+                        </div>
+
+                        <!-- Right: Visual Sputum Cup & Analysis -->
+                        <div class="border-2 border-dashed border-brand-200 p-5 rounded-2xl bg-brand-50/50 flex flex-col items-center justify-center text-center space-y-4">
+                            <span class="text-[9px] font-black uppercase tracking-widest text-brand-700">Visualisasi Sampel Dahak</span>
+                            
+                            <!-- Visual representation of Sputum Cup -->
+                            <div class="w-24 h-28 border-4 border-slate-300 bg-white rounded-b-xl rounded-t-sm relative flex items-end justify-center overflow-hidden shadow-inner">
+                                <div class="absolute inset-x-0 top-0 h-4 bg-blue-500/10 border-b border-slate-200"></div>
+                                <div id="sputum-level-fluid" class="w-full h-0 bg-slate-300 transition-all duration-500"></div>
+                            </div>
+
+                            <div>
+                                <h5 id="sputum-analysis-title" class="text-xs font-black uppercase text-slate-950">Menunggu Analisis Dahak</h5>
+                                <p id="sputum-analysis-desc" class="text-[10px] text-slate-950 font-bold max-w-xs mt-1">
+                                    Klik salah satu karakteristik dahak di sebelah kiri untuk melihat implikasi klinis dan pertahanan mukosa paru Anda.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="evaluatePulmonaryDefense()" class="w-full bg-gradient-to-r from-brand-600 to-phyto-500 hover:from-brand-700 hover:to-phyto-600 text-white font-black uppercase text-xs tracking-widest py-3.5 rounded-xl transition-all shadow-md">
+                        Analisis Ketahanan Mukosa Paru
                     </button>
 
-                    <div id="referral-output-panel" class="hidden space-y-4 pt-4 border-t-2 border-brand-100">
-                        <div class="flex items-center space-x-3 text-brand-950 pb-2 border-b-2 border-brand-100">
-                            <i data-lucide="file-text" class="w-6 h-6 text-brand-600"></i>
-                            <h3 class="font-black text-sm uppercase">Nota Rujukan Medis Terfasilitasi</h3>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                            <div class="bg-brand-50 p-3 rounded-xl border-2 border-brand-200">
-                                <span class="text-[9px] text-brand-600 uppercase block font-black">Status Rujukan</span>
-                                <strong id="ref-status" class="text-danger-500 font-black uppercase">Segera Hubungi Faskes</strong>
-                            </div>
-                            <div class="bg-brand-50 p-3 rounded-xl border-2 border-brand-200">
-                                <span class="text-[9px] text-brand-600 uppercase block font-black">Spesialis Rujukan Utama</span>
-                                <strong id="ref-target" class="text-brand-600 font-black uppercase">Dokter Paru / Dokter Gigi</strong>
-                            </div>
-                        </div>
-
-                        <p class="text-xs text-slate-950 font-bold leading-relaxed" id="ref-desc">
-                            Berdasarkan tingkat keparahan plak lidah serta asupan nutrisi harian yang berada dalam kategori kritis, kami menganjurkan Anda untuk segera melakukan pemeriksaan formal ke Dokter Gigi Spesialis Penyakit Mulut atau Puskesmas mitra TBC terdekat.
+                    <!-- Actionable Result Box -->
+                    <div id="sputum-action-box" class="hidden bg-orange-50 p-4 rounded-xl border-2 border-brand-300 text-left space-y-3">
+                        <h5 class="text-xs font-black text-brand-700 uppercase flex items-center gap-1">
+                            <i data-lucide="shield-alert" class="w-4 h-4"></i> Hasil Diagnosis Ketahanan Paru
+                        </h5>
+                        <p id="sputum-action-text" class="text-[11px] text-slate-950 leading-relaxed font-bold">
+                            Pesan penanganan paru dan hubungannya dengan kandidiasis mulut.
                         </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Community Health Monitoring -->
+        <section id="community" class="py-16 bg-white border-t-2 border-brand-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <span class="bg-brand-100 border-2 border-brand-200 text-brand-700 text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider">
+                        KST-TBC Community Health Hub
+                    </span>
+                    <h2 class="text-3xl font-black text-brand-950 mt-4 uppercase">Komunitas Sehat Tuntas TBC (KST-TBC)</h2>
+                    <p class="text-slate-950 mt-2 text-xs sm:text-sm font-bold">
+                        Bergabung dalam ekosistem pendampingan sebaya nasional guna mempercepat eliminasi tuberkulosis, membasmi stigma negatif, serta memitigasi infeksi Candida mulut secara kolektif bagi seluruh elemen masyarakat.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <!-- Column 1: Live Stats & PMO Matchmaker -->
+                    <div class="lg:col-span-4 space-y-6">
+                        <!-- Community Stats -->
+                        <div class="glass-card rounded-2xl p-6 border-2 border-brand-200 bg-white shadow-md space-y-4">
+                            <h3 class="font-black text-xs text-slate-950 uppercase flex items-center gap-1.5 pb-2 border-b-2 border-brand-100">
+                                <i data-lucide="bar-chart" class="text-brand-500"></i>
+                                Metrik Sebaran Wilayah KST-TBC
+                            </h3>
+                            <div class="space-y-3 text-xs">
+                                <div class="flex justify-between">
+                                    <span class="text-brand-700 font-bold">Pasien Terbebas Oral Thrush</span>
+                                    <strong class="text-brand-600 font-black">542 Pasien</strong>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-brand-700 font-bold">Kepatuhan Terapi Nasional</span>
+                                    <strong class="text-brand-600 font-black">91.7%</strong>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-brand-700 font-bold">Relawan PMO Aktif Terdaftar</span>
+                                    <strong class="text-phyto-600 font-black">1.284 Kader</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PMO Peer Matchmaker -->
+                        <div class="glass-card rounded-2xl p-6 border-2 border-brand-200 bg-white shadow-md space-y-4">
+                            <h3 class="font-black text-xs text-slate-950 uppercase flex items-center gap-1.5 pb-2 border-b-2 border-brand-100">
+                                <i data-lucide="user-check" class="text-brand-500"></i>
+                                AI Peer PMO Matchmaker
+                            </h3>
+                            <p class="text-[10px] text-slate-950 font-bold leading-normal">
+                                Sistem mencocokkan daerah tempat tinggal Anda dengan kader kesehatan setempat yang bertindak sebagai Pendamping Minum Obat (PMO) digital Anda.
+                            </p>
+                            <button onclick="findPMOMatch()" class="w-full bg-slate-950 hover:bg-slate-900 text-white font-black text-[10px] uppercase py-2.5 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5">
+                                <i data-lucide="search" class="w-4 h-4"></i> Cari PMO Daerah Saya
+                            </button>
+
+                            <!-- PMO Result Display -->
+                            <div id="pmo-match-result" class="hidden p-3 bg-brand-50 border-2 border-brand-200 rounded-xl space-y-2">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 bg-brand-500 text-white rounded-full flex items-center justify-center font-black text-xs">
+                                        PMO
+                                    </div>
+                                    <div>
+                                        <h4 id="pmo-name" class="font-black text-xs text-slate-950">Nama PMO</h4>
+                                        <p id="pmo-unit" class="text-[9px] text-brand-700 font-bold">Unit Puskesmas</p>
+                                    </div>
+                                </div>
+                                <div class="text-[9px] text-slate-950 font-bold leading-relaxed border-t border-brand-200 pt-1.5">
+                                    💬 <strong>Pesan Pendamping:</strong> "Saya siap memantau jadwal minum OAT dan pembilasan sisa steroid hirup Anda menggunakan Mucoshield-TB setiap hari!"
+                                </div>
+                                <a id="pmo-contact-link" href="#" target="_blank" class="w-full bg-brand-600 hover:bg-brand-700 text-white text-[9px] font-black uppercase py-1.5 rounded text-center block tracking-wider">
+                                    Hubungi PMO via WhatsApp
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Pledge Form & Live Wall of Hope -->
+                    <div class="lg:col-span-4 space-y-6">
+                        <div class="glass-card rounded-2xl p-6 border-2 border-brand-200 bg-white shadow-md space-y-4">
+                            <h3 class="font-black text-xs text-slate-950 uppercase flex items-center gap-1.5 pb-2 border-b-2 border-brand-100">
+                                <i data-lucide="edit-3" class="text-brand-600"></i>
+                                Tulis Pesan Di Dinding Harapan
+                            </h3>
+                            
+                            <form onsubmit="submitPledgeToWall(event)" class="space-y-3">
+                                <div>
+                                    <label class="block text-[9px] font-black text-brand-800 uppercase tracking-wider mb-1">Pekerjaan / Instansi / Daerah (Umum)</label>
+                                    <input type="text" id="pledge-school" required placeholder="Contoh: Malang / Wiraswasta / Umum" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-3 py-2 text-xs text-slate-950 font-black outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-[9px] font-black text-brand-800 uppercase tracking-wider mb-1">Pesan Motivasi / Komitmen Sembuh</label>
+                                    <textarea id="pledge-vision" required rows="2" placeholder="Contoh: Terapi OAT tuntas, paru sehat, bebas sariawan!" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-3 py-2 text-xs text-slate-950 font-black outline-none resize-none"></textarea>
+                                </div>
+                                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-black text-[10px] uppercase py-2.5 rounded-xl transition-all shadow-sm">
+                                    Unggah Komitmen Ke Dinding Harapan
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Wall of Hope List Feed -->
+                        <div class="glass-card rounded-2xl p-6 border-2 border-brand-200 bg-white shadow-md space-y-3">
+                            <h4 class="font-black text-xs text-slate-950 uppercase flex items-center gap-1">
+                                <i data-lucide="heart" class="text-red-500 animate-pulse"></i>
+                                Dinding Harapan KST-TBC Live Feed
+                            </h4>
+                            <div id="wall-of-hope-feed" class="space-y-2 max-h-48 overflow-y-auto pr-1">
+                                <!-- Pre-populated items for impact -->
+                                <div class="p-2.5 bg-brand-50 border-l-4 border-brand-500 rounded-lg text-[10px] space-y-0.5">
+                                    <span class="font-black text-slate-950 block">Rizki - Malang (Wiraswasta)</span>
+                                    <p class="text-slate-900 font-medium italic">"Masa depan cerah tanpa putus obat TBC. Kita pasti sembuh bersama!"</p>
+                                </div>
+                                <div class="p-2.5 bg-brand-50 border-l-4 border-phyto-500 rounded-lg text-[10px] space-y-0.5">
+                                    <span class="font-black text-slate-950 block">Siti Aminah - Surabaya (Ibu Rumah Tangga)</span>
+                                    <p class="text-slate-900 font-medium italic">"Disiplin berkumur pasca inhaler adalah kuncinya. Bye oral thrush!"</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 3: Advocate Badge Generator & Webinar Simulator -->
+                    <div class="lg:col-span-4 space-y-6">
+                        <!-- Campaign Badge Generator -->
+                        <div class="glass-card rounded-2xl p-6 border-2 border-brand-200 bg-white shadow-md space-y-4">
+                            <h3 class="font-black text-xs text-slate-950 uppercase flex items-center gap-1.5 pb-2 border-b-2 border-brand-100">
+                                <i data-lucide="award" class="text-brand-500"></i>
+                                KST-TBC Advocate Badge Generator
+                            </h3>
+                            <p class="text-[10px] text-slate-950 font-bold leading-normal">
+                                Generate kartu anggota kepedulian sosial KST-TBC Anda untuk mendukung gerakan bebas stigma tuberkulosis nasional di seluruh lapisan masyarakat.
+                            </p>
+                            <button onclick="generateAdvocateCard()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-black text-[10px] uppercase py-2 rounded-xl transition-all shadow-sm">
+                                Buat Kartu Anggota Digital Saya
+                            </button>
+
+                            <!-- Dynamic Digital Badge Card -->
+                            <div id="digital-advocate-badge" class="hidden bg-gradient-to-tr from-brand-900 to-brand-950 text-white p-4 rounded-xl space-y-3 border-2 border-brand-500 relative overflow-hidden text-center shadow-lg">
+                                <div class="absolute -top-10 -right-10 w-24 h-24 bg-brand-500/20 rounded-full"></div>
+                                <span class="text-[8px] bg-brand-500 text-white font-black px-2.5 py-0.5 rounded-full uppercase tracking-widest block mx-auto w-fit">Advocate KST-TBC</span>
+                                <div>
+                                    <h4 id="badge-card-name" class="font-black text-xs uppercase text-white">Nama</h4>
+                                    <p id="badge-card-school" class="text-[9px] text-brand-200 font-bold">Asal Daerah / Profesi (Umum)</p>
+                                </div>
+                                <p id="badge-card-quote" class="text-[9px] text-white italic font-bold max-w-xs mx-auto">"Berjuang mengeliminasi TBC, merawat mulut sehat bebas kandidiasis bersama Mucoshield-TB."</p>
+                                <div class="flex justify-between items-end border-t border-brand-800 pt-2 text-[8px] font-mono font-bold text-brand-300">
+                                    <span>ID: KST/2026/092</span>
+                                    <span>[QR VERIFIED]</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Youtube Webinar & Podcast Hub -->
+                        <div class="glass-card rounded-2xl p-6 border-2 border-brand-200 bg-white shadow-md space-y-4">
+                            <h3 class="font-black text-xs text-slate-950 uppercase flex items-center gap-1.5 pb-2 border-b-2 border-brand-100">
+                                <i data-lucide="video" class="text-brand-500 animate-pulse"></i>
+                                Webinar & Podcast Player
+                            </h3>
+                            
+                            <!-- Video simulator box -->
+                            <div class="bg-black text-white rounded-xl overflow-hidden aspect-video relative group border-2 border-brand-200">
+                                <img id="webinar-thumb" src="https://placehold.co/640x360/ea580c/ffffff?text=Webinar+Tuberkulosis+dan+Oral+Thrush" alt="Video" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-brand-950/40 flex flex-col justify-between p-3">
+                                    <span class="bg-red-600 text-[8px] font-black px-2 py-0.5 rounded text-white w-fit">SIMULATOR YouTube</span>
+                                    <button onclick="toggleWebinarSimulation()" class="w-10 h-10 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center mx-auto shadow-lg">
+                                        <i id="webinar-play-btn" data-lucide="play" class="w-5 h-5 fill-white"></i>
+                                    </button>
+                                    <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded truncate text-brand-100 font-black">Penatapan Higienitas Inhaler Tuberkulosis</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Smart Referral System -->
+        <section id="referrals" class="py-16 bg-brand-50/20 border-t-2 border-brand-100">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6">
+                <div class="text-center mb-12">
+                    <span class="bg-brand-100 border-2 border-brand-200 text-brand-700 text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider">
+                        Smart Clinical Referrals
+                    </span>
+                    <h2 class="text-3xl font-black text-brand-950 mt-4 uppercase">Smart Referral & Mapping System</h2>
+                    <p class="text-slate-950 mt-2 text-xs sm:text-sm font-bold">
+                        Sistem rujukan pintar yang mendeteksi indikator kritis kesehatan pasien untuk menghasilkan rekomendasi rujukan faskes secara instan serta pemetaan lokasi Rumah Sakit daerah demi pencegahan komplikasi klinis.
+                    </p>
+                </div>
+
+                <!-- Regional Referral Mapping Visual Hub -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="glass-card rounded-2xl p-5 bg-white border-2 border-brand-200 space-y-3">
+                        <div class="flex items-center gap-2 text-brand-600">
+                            <i data-lucide="map-pin" class="w-5 h-5"></i>
+                            <h4 class="font-black text-sm uppercase text-slate-950">Fasilitas Rujukan Utama Jawa Timur</h4>
+                        </div>
+                        <ul class="space-y-2 text-xs text-slate-950 font-bold">
+                            <li class="p-2 bg-brand-50 border-l-4 border-brand-500 rounded text-left">
+                                <strong class="block text-brand-700">Surabaya:</strong>
+                                RSUD Dr. Soetomo Surabaya (Poli Gigi Spesialis Penyakit Mulut & Poli Paru)
+                            </li>
+                            <li class="p-2 bg-brand-50 border-l-4 border-brand-500 rounded text-left">
+                                <strong class="block text-brand-700">Malang:</strong>
+                                RSUD Dr. Saiful Anwar Malang (Pusat Pelayanan Paru Terpadu & Gigi Mulut)
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-5 bg-white border-2 border-brand-200 space-y-3">
+                        <div class="flex items-center gap-2 text-brand-600">
+                            <i data-lucide="map" class="w-5 h-5"></i>
+                            <h4 class="font-black text-sm uppercase text-slate-950">Fasilitas Rujukan Utama DKI, Jabar & DIY</h4>
+                        </div>
+                        <ul class="space-y-2 text-xs text-slate-950 font-bold">
+                            <li class="p-2 bg-brand-50 border-l-4 border-phyto-500 rounded text-left">
+                                <strong class="block text-phyto-600">Jakarta:</strong>
+                                RSUP Persahabatan (Pusat Respirasi Nasional Terpadu & Spesialis Penyakit Mulut)
+                            </li>
+                            <li class="p-2 bg-brand-50 border-l-4 border-phyto-500 rounded text-left">
+                                <strong class="block text-phyto-600">Yogyakarta:</strong>
+                                RSUP Dr. Sardjito Sleman (Pusat Rujukan DIY / Poli Penyakit Mulut)
+                            </li>
+                            <li class="p-2 bg-brand-50 border-l-4 border-phyto-500 rounded text-left">
+                                <strong class="block text-phyto-600">Bandung:</strong>
+                                RSUP Dr. Hasan Sadikin Bandung (Pusat Penanganan Paru & Gigi)
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Referral Letter Generator and Dynamic Hospital Mapping -->
+                <div class="glass-card rounded-2xl p-6 sm:p-10 border-2 border-brand-200 bg-white shadow-xl space-y-6">
+                    <button onclick="checkClinicalReferral()" class="w-full bg-gradient-to-r from-brand-600 to-phyto-500 hover:from-brand-700 hover:to-phyto-600 text-white font-black uppercase text-xs tracking-widest py-3.5 rounded-xl shadow-md transition-all">
+                        Periksa Status Rujukan Medis Saya & Generate Surat
+                    </button>
+
+                    <!-- Printable Formal Referral Letter (Highly Structured & Realistic) -->
+                    <div id="referral-output-panel" class="hidden space-y-6 pt-4 border-t-2 border-brand-100">
                         
-                        <div class="flex justify-end pt-2">
+                        <div id="printable-referral-letter" class="border-4 border-slate-950 p-6 bg-white rounded-2xl text-slate-950 space-y-6 shadow-md relative">
+                            <!-- Kop Surat Medis Formal -->
+                            <div class="text-center border-b-4 border-double border-slate-950 pb-4">
+                                <h3 class="text-lg font-black tracking-wide uppercase">MUCOSHIELD-TB CLINICAL REFERRAL NETWORK</h3>
+                                <p class="text-[10px] font-bold uppercase tracking-widest">Jejaring Pendukung Terapi TBC Nasional & Pencegahan Oral Thrush</p>
+                                <p class="text-[9px] font-semibold italic">Sekretariat Bersama Mitigasi Candida Inhalasi • Telepon Darurat: 119</p>
+                            </div>
+
+                            <div class="flex justify-between items-center text-xs">
+                                <div>
+                                    <span class="font-black">No. Rujukan:</span> <span id="ref-letter-number" class="font-mono font-bold">REF/MSTB/2026/0891</span>
+                                </div>
+                                <div>
+                                    <span class="font-black">Sifat:</span> <span class="text-danger-500 font-black uppercase">SANGAT SEGERA / URGENT</span>
+                                </div>
+                            </div>
+
+                            <!-- Identitas Pasien -->
+                            <div class="space-y-2">
+                                <h4 class="font-black text-xs uppercase bg-slate-100 px-2 py-1 rounded">I. Identitas Biologis Pasien</h4>
+                                <div class="grid grid-cols-2 gap-4 text-xs">
+                                    <div class="text-left">
+                                        <p><span class="font-bold">Nama Pasien:</span> <span id="ref-letter-name" class="font-black">Ahmad</span></p>
+                                        <p><span class="font-bold">Usia / Gender:</span> <span id="ref-letter-age-gender" class="font-black">28 Tahun / L</span></p>
+                                        <p><span class="font-bold">Domisili (Kab/Kota):</span> <span id="ref-letter-region" class="font-black">Malang</span></p>
+                                    </div>
+                                    <div class="text-left">
+                                        <p><span class="font-bold">Tinggi / Berat Badan:</span> <span id="ref-letter-height-weight" class="font-black">165cm / 58kg</span></p>
+                                        <p><span class="font-bold">Indeks Massa Tubuh (IMT):</span> <span id="ref-letter-bmi" class="font-black">21.3 (Normal)</span></p>
+                                        <p><span class="font-bold">Status Diabetes:</span> <span id="ref-letter-diabetes" class="font-black">Tidak Ada</span></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Temuan Klinis AI & Diagnostik -->
+                            <div class="space-y-2">
+                                <h4 class="font-black text-xs uppercase bg-slate-100 px-2 py-1 rounded">II. Temuan Klinis & Hasil Penapisan Sistem</h4>
+                                <div class="grid grid-cols-2 gap-4 text-xs">
+                                    <div class="text-left">
+                                        <p><span class="font-bold">Lama Terapi TBC:</span> <span id="ref-letter-tb-dur" class="font-black">2 Bulan</span></p>
+                                        <p><span class="font-bold">Kategori Inhaler:</span> <span id="ref-letter-inhaler" class="font-black">ICS (Kortikosteroid)</span></p>
+                                        <p><span class="font-bold">Status Merokok:</span> <span id="ref-letter-smoking" class="font-black">Bukan Perokok</span></p>
+                                    </div>
+                                    <div class="text-left">
+                                        <p><span class="font-bold">Skor Risiko Oral Thrush AI:</span> <span id="ref-letter-risk-score" class="font-black text-danger-600">85% (Tinggi)</span></p>
+                                        <p><span class="font-bold">Skor Gejala Mandiri:</span> <span id="ref-letter-symptom-score" class="font-black">65 Poin (Kritis)</span></p>
+                                        <p><span class="font-bold">Status Sputum & Paru:</span> <span id="ref-letter-sputum-status" class="font-black">Bercak Darah</span></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Fasilitas Kesehatan Rujukan Hasil Pemetaan -->
+                            <div class="space-y-2">
+                                <h4 class="font-black text-xs uppercase bg-slate-100 px-2 py-1 rounded">III. Fasilitas Kesehatan Rujukan Utama Pemetaan Daerah</h4>
+                                <div class="p-3 border-2 border-dashed border-brand-400 bg-brand-50/50 rounded-xl space-y-2 text-xs text-left">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <strong class="block text-slate-950 uppercase text-xs" id="ref-hospital-name">RSUD Dr. Saiful Anwar Malang (Rujukan Utama Paru & Gigi Mulut)</strong>
+                                            <span class="text-[10px] block text-slate-900" id="ref-hospital-address">Jl. Jaksa Agung Suprapto No.2, Klojen, Kota Malang</span>
+                                            <span class="text-[10px] block text-slate-900" id="ref-hospital-contact">Kontak: (0341) 362101</span>
+                                        </div>
+                                        <span class="bg-brand-500 text-white font-black text-[9px] px-2 py-1 rounded">Terpetakan</span>
+                                    </div>
+                                    <div class="border-t border-brand-200 pt-2 text-[10px] text-brand-900 font-bold">
+                                        📍 <strong>Puskesmas Pendamping:</strong> <span id="ref-puskesmas-name">Puskesmas Dinoyo Malang</span> (Satelit PMO Terintegrasi).
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Masukan & Rekomendasi Dokter -->
+                            <div class="space-y-2">
+                                <h4 class="font-black text-xs uppercase bg-slate-100 px-2 py-1 rounded">IV. Instruksi Penanganan Medis / Catatan Dokter Penelaah</h4>
+                                <div class="p-3 bg-red-50 border-2 border-danger-500 rounded-xl text-xs text-danger-600 font-bold space-y-1 text-left">
+                                    <p class="uppercase text-[11px] font-black">🚨 PERHATIAN! SEGERA LAKUKAN PEMERIKSAAN MEDIS:</p>
+                                    <p class="leading-relaxed">
+                                        Pasien teridentifikasi mengalami penumpukan deposit steroid sisa inhalasi dan kolonisasi hifa jamur *Candida albicans* yang memicu risiko disfagia (sulit menelan) parah. **DIANJURKAN UNTUK SEGERA DIPERIKSA OLEH DOKTER SPESIALIS PARU** guna evaluasi sediaan dosis kortikosteroid hirup, serta **DOKTER GIGI SPESIALIS PENYAKIT MULUT (Sp.PM)** untuk tindakan debridement plak dan sediaan antijamur sistemik (Nistatin oral drop).
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Penutup / Signature -->
+                            <div class="flex justify-between items-end pt-4 border-t border-slate-300 text-xs">
+                                <div class="max-w-[150px] text-left">
+                                    <p class="text-[9px] italic font-semibold">Tembusan Kepada:</p>
+                                    <ul class="text-[8px] list-disc pl-3 font-bold">
+                                        <li>Kepala Dinas Kesehatan Setempat</li>
+                                        <li>Kepala Puskesmas PMO Terkait</li>
+                                        <li>Arsip Medis MUCOSHIELD-TB</li>
+                                    </ul>
+                                </div>
+                                <div class="text-center relative">
+                                    <span class="text-[8px] uppercase tracking-widest block mb-2 font-black">Digital Signature</span>
+                                    <!-- QR Code simulation inside printable letter -->
+                                    <div class="w-14 h-14 bg-white border border-slate-950 mx-auto mb-1 flex items-center justify-center font-mono text-[7px] p-1 font-bold">
+                                        [QR SECURITY VALID]
+                                    </div>
+                                    <p class="font-black underline uppercase text-[9px]">MUCOSHIELD MEDICAL BOT</p>
+                                    <p class="text-[8px] font-bold">Sistem Rujukan Terverifikasi</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Print Action Button -->
+                        <div class="flex justify-end gap-3 pt-2">
                             <button onclick="window.print()" class="bg-slate-950 hover:bg-slate-900 text-white text-[10px] font-black uppercase tracking-wider px-4 py-2 rounded-lg transition-all flex items-center gap-1.5">
-                                <i data-lucide="printer" class="w-4 h-4"></i> Cetak Surat Rujukan
+                                <i data-lucide="printer" class="w-4 h-4"></i> Cetak Surat Rujukan Resmi
                             </button>
                         </div>
                     </div>
@@ -1291,7 +1569,7 @@
     <!-- Footer -->
     <footer class="bg-brand-950 text-brand-100 py-16 border-t-2 border-brand-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div class="md:col-span-2 space-y-4">
+            <div class="md:col-span-2 space-y-4 text-left">
                 <div class="flex items-center space-x-2">
                     <div class="bg-brand-500 text-white p-2 rounded-lg">
                         <i data-lucide="droplet" class="w-5 h-5"></i>
@@ -1302,16 +1580,16 @@
                     Inovasi sistem penapisan, monitoring kepatuhan, dan pendukung kesembuhan terapi TB nasional dengan mitigasi berbasis nanoenkapsulasi daun sembung dan daun sirih.
                 </p>
             </div>
-            <div>
+            <div class="text-left">
                 <h4 class="text-xs font-black text-white uppercase tracking-wider mb-4">Fitur Utama</h4>
                 <ul class="space-y-2 text-xs font-bold">
                     <li><a href="#skrining" class="hover:text-phyto-400 transition-all text-brand-100">Skrining AI</a></li>
                     <li><a href="#photo-scan" class="hover:text-phyto-400 transition-all text-brand-100">Photo Scan AI</a></li>
-                    <li><a href="#prediction" class="hover:text-phyto-400 transition-all text-brand-100">Prediksi Kepatuhan</a></li>
+                    <li><a href="#prediction" class="hover:text-phyto-400 transition-all text-brand-100">Sputum Guard</a></li>
                     <li><a href="#reminders" class="hover:text-phyto-400 transition-all text-brand-100">TB Reminders</a></li>
                 </ul>
             </div>
-            <div>
+            <div class="text-left">
                 <h4 class="text-xs font-black text-white uppercase tracking-wider mb-4">Bantuan Medis</h4>
                 <p class="text-xs text-brand-200 leading-relaxed font-bold">
                     Tingkatkan kepatuhan terapi Anda. Hubungi faskes terdekat untuk penanganan klinis lebih lanjut.
@@ -1322,7 +1600,7 @@
 
         <!-- Comprehensive Medical Disclaimer Section -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-6 border-t-2 border-brand-900">
-            <div class="bg-brand-900/60 border-2 border-brand-800 rounded-2xl p-5 flex flex-col sm:flex-row items-start gap-4">
+            <div class="bg-brand-900/60 border-2 border-brand-800 rounded-2xl p-5 flex flex-col sm:flex-row items-start gap-4 text-left">
                 <div class="bg-brand-500/10 text-brand-400 p-2.5 rounded-xl shrink-0 mt-0.5">
                     <i data-lucide="info" class="w-6 h-6"></i>
                 </div>
@@ -1342,7 +1620,6 @@
         </div>
     </footer>
 
-    <!-- Script Operations Logic -->
     <script>
         // Init Lucide Icons
         lucide.createIcons();
@@ -1352,7 +1629,7 @@
             name: "",
             age: 0,
             gender: "L",
-            region: "",
+            region: "Malang",
             height: 0,
             weight: 0,
             tbHistory: "baru",
@@ -1363,6 +1640,40 @@
             prevThrush: "tidak"
         };
 
+        // Regional Referral Hospital Database Mapping
+        const regionalHospitals = {
+            "Malang": {
+                name: "RSUD Dr. Saiful Anwar Malang (Rujukan Utama Paru & Spesialis Penyakit Mulut)",
+                address: "Jl. Jaksa Agung Suprapto No.2, Klojen, Kota Malang",
+                contact: "(0341) 362101",
+                puskesmas: "Puskesmas Dinoyo Malang (Puskesmas Satelit Pemantau TBC)"
+            },
+            "Surabaya": {
+                name: "RSUD Dr. Soetomo Surabaya (Pusat Rujukan Tersier Gigi Mulut & Paru Jatim)",
+                address: "Jl. Mayjen Prof. Dr. Moestopo No.6-8, Gubeng, Surabaya",
+                contact: "(031) 5501078",
+                puskesmas: "Puskesmas Mulyorejo Surabaya (Faskes Pemantau Terapi)"
+            },
+            "Jakarta": {
+                name: "RSUP Persahabatan Jakarta (Pusat Rujukan Respirasi Nasional & Gigi Mulut)",
+                address: "Jl. Persahabatan Raya No.1, Rawamangun, Jakarta Timur",
+                contact: "(021) 4891708",
+                puskesmas: "Puskesmas Kecamatan Pulogadung (Faskes Pendamping PMO)"
+            },
+            "Yogyakarta": {
+                name: "RSUP Dr. Sardjito Yogyakarta (Pusat Rujukan DIY / Poli Gigi Penyakit Mulut)",
+                address: "Jl. Kesehatan No.1, Senolowo, Sinduadi, Mlati, Sleman",
+                contact: "(0274) 587333",
+                puskesmas: "Puskesmas Mlati I Sleman (Faskes Pemantau Tepat Terapi)"
+            },
+            "Bandung": {
+                name: "RSUP Dr. Hasan Sadikin Bandung (Rujukan Paru & Oral Medis Jawa Barat)",
+                address: "Jl. Pasteur No.38, Pasteur, Kec. Sukajadi, Kota Bandung",
+                contact: "(022) 2034953",
+                puskesmas: "Puskesmas Coblong Bandung"
+            }
+        };
+
         // Otentikasi Registration Form Handler
         function handleRegistration(event) {
             event.preventDefault();
@@ -1370,7 +1681,7 @@
             globalUser.name = document.getElementById('reg-name').value.trim();
             globalUser.age = parseInt(document.getElementById('reg-age').value.trim());
             globalUser.gender = document.getElementById('reg-gender').value;
-            globalUser.region = document.getElementById('reg-region').value.trim();
+            globalUser.region = document.getElementById('reg-region').value;
             globalUser.height = parseInt(document.getElementById('reg-height').value.trim());
             globalUser.weight = parseInt(document.getElementById('reg-weight').value.trim());
             globalUser.tbHistory = document.getElementById('reg-tb-history').value;
@@ -1398,7 +1709,7 @@
             mobileMenu.classList.toggle('hidden');
         });
 
-        // Feature 1: AI Oral Thrush Risk Screening
+        // AI Oral Thrush Risk Screening
         function calculateAIThrushRisk() {
             const inhaleFreq = parseInt(document.getElementById('scr-inhale-freq').value) || 0;
             const gargleHabit = document.getElementById('scr-gargle-habit').value;
@@ -1451,7 +1762,7 @@
             // 10. Konsumsi Gula
             if (sugarIntake === 'tinggi') score += 10;
 
-            // Integrasikan parameter sosiopsikosomatik dari data registrasi awal
+            // Integrasikan parameter dari data registrasi awal
             if (globalUser.diabetes === 'ada') score += 10;
             if (bmi < 18.5) score += 10; // Kekurangan gizi memperlemah imunitas seluler
             if (globalUser.prevThrush === 'pernah') score += 10;
@@ -1509,7 +1820,7 @@
             lucide.createIcons();
         }
 
-        // Feature 2: pH Indicator Simulator
+        // Dynamic pH Indicator Technology
         let currentTargetPH = 7.0;
 
         // Visual pH trigger updater
@@ -1568,7 +1879,7 @@
             }, 800);
         }
 
-        // Feature 3: Oral Thrush Self-Assessment
+        // Oral Thrush Self-Assessment
         function calculateSelfAssessment(event) {
             event.preventDefault();
             const q1 = parseInt(document.getElementById('assess-q1').value);
@@ -1634,7 +1945,7 @@
             lucide.createIcons();
         }
 
-        // Feature 4: Smart Oral Photo Screening AI Simulation
+        // Smart Oral Photo Screening AI Simulation
         let currentPhotoType = "sehat";
 
         function selectPhotoSample(type) {
@@ -1795,7 +2106,7 @@
             }
         }
 
-        // Feature 7: Nutritional Assessment
+        // Nutritional Assessment
         function evaluateNutritionalRisk() {
             const wtLoss = document.getElementById('nut-wt-loss').value;
             const appetite = document.getElementById('nut-appetite').value;
@@ -1823,79 +2134,188 @@
             document.getElementById('nutrition-result-panel').classList.remove('hidden');
         }
 
-        // Feature 8: TB Recovery Prediction Index
-        function calculateRecoveryIndex() {
-            // Compute based on simulation score states
-            let scoreVal = parseInt(document.getElementById('adherence-score-val').textContent) || 0;
-            let wtLoss = document.getElementById('nut-wt-loss').value;
+        // Sputum Visual Analysis & Pulmonary Defense
+        let selectedSputumType = "";
 
-            let successPct = Math.round(scoreVal * 0.8);
-            if (wtLoss === 'tidak') successPct += 20;
-            successPct = Math.min(successPct, 98);
+        function selectSputumPattern(type) {
+            selectedSputumType = type;
+            const cupFluid = document.getElementById('sputum-level-fluid');
+            const title = document.getElementById('sputum-analysis-title');
+            const desc = document.getElementById('sputum-analysis-desc');
 
-            document.getElementById('recovery-score-display').textContent = `${successPct}%`;
-            
-            const badge = document.getElementById('recovery-status-badge');
-            const desc = document.getElementById('recovery-desc-text');
+            cupFluid.className = "w-full transition-all duration-500";
 
-            if (successPct >= 80) {
-                badge.textContent = "Sangat Tinggi";
-                badge.className = "text-[10px] font-black px-2.5 py-0.5 rounded-full text-white bg-phyto-500 uppercase block mt-1.5 w-fit mx-auto";
-                desc.textContent = "Selamat! Dengan indeks kepatuhan tinggi dan asupan nutrisi yang terpelihara, peluang kesembuhan paru dan mulut Anda berada dalam tingkat optimal.";
-            } else if (successPct >= 50) {
-                badge.textContent = "Sedang";
-                badge.className = "text-[10px] font-black px-2.5 py-0.5 rounded-full text-white bg-warning-500 uppercase block mt-1.5 w-fit mx-auto";
-                desc.textContent = "Peluang sedang. Tingkatkan kebiasaan berkumur menggunakan fitomouthwash nanoenkapsulasi untuk mencegah kolonisasi hifa jamur yang menyulitkan terapi.";
-            } else {
-                badge.textContent = "Sangat Rendah";
-                badge.className = "text-[10px] font-black px-2.5 py-0.5 rounded-full text-white bg-danger-500 uppercase block mt-1.5 w-fit mx-auto";
-                desc.textContent = "Sangat rendah. Kegagalan kepatuhan minum OAT memicu resistensi obat paru, diperparah kolonisasi Candida yang menyakitkan saat makan.";
+            if (type === 'berdarah') {
+                cupFluid.style.height = '40%';
+                cupFluid.className = "w-full bg-red-600 transition-all duration-500";
+                title.textContent = "Bercak Darah (Hemoptisis)";
+                title.className = "text-xs font-black uppercase text-danger-500";
+                desc.textContent = "Bercak darah mengindikasikan adanya erosi pembuluh darah di paru-paru akibat infeksi bakteri TBC aktif. Perlindungan mukosa pernapasan melemah drastis.";
+            } else if (type === 'purulen') {
+                cupFluid.style.height = '50%';
+                cupFluid.className = "w-full bg-yellow-500 transition-all duration-500";
+                title.textContent = "Purulen (Infeksi Aktif)";
+                title.className = "text-xs font-black uppercase text-warning-500";
+                desc.textContent = "Dahak kuning/hijau kental menunjukkan penumpukan sel darah putih (nanah). Infeksi sekunder bakteri sedang berlangsung tinggi di saluran napas.";
+            } else if (type === 'mukoid') {
+                cupFluid.style.height = '60%';
+                cupFluid.className = "w-full bg-amber-600 transition-all duration-500 opacity-85";
+                title.textContent = "Putih Kental (Risiko Dehidrasi)";
+                title.className = "text-xs font-black uppercase text-brand-600";
+                desc.textContent = "Dahak putih pekat, lengket, dan sulit dikeluarkan. Kondisi ini sering berjalan seiring dengan xerostomia (mulut kering), yang memicu pertumbuhan cepat spora Candida.";
+            } else if (type === 'jernih') {
+                cupFluid.style.height = '30%';
+                cupFluid.className = "w-full bg-teal-100 transition-all duration-500";
+                title.textContent = "Sputum Jernih (Aman)";
+                title.className = "text-xs font-black uppercase text-phyto-600";
+                desc.textContent = "Dahak jernih encer mengindikasikan saluran pernapasan relatif terkendali tanpa penumpukan sel imun akut.";
             }
-
-            document.getElementById('recovery-result-panel').classList.remove('hidden');
+            showCustomNotification(`Sputum tipe ${type.toUpperCase()} terpilih.`);
         }
 
-        // Feature 9: Community & KST-TBC Pledge Submit
-        function submitCommunityPledge(event) {
+        function evaluatePulmonaryDefense() {
+            if (!selectedSputumType) {
+                showCustomNotification("Silakan pilih karakteristik dahak terlebih dahulu!");
+                return;
+            }
+
+            const weeks = parseInt(document.getElementById('sputum-cough-weeks').value) || 0;
+            const actionBox = document.getElementById('sputum-action-box');
+            const actionText = document.getElementById('sputum-action-text');
+
+            let message = "";
+
+            if (selectedSputumType === 'berdarah' || weeks >= 3) {
+                message = `🚨 <strong>PERINGATAN KRITIS:</strong> Batuk berdarah atau batuk berlanjut selama ${weeks} minggu merupakan gejala kardinal aktif Tuberkulosis yang memerlukan rujukan darurat ke Dokter Spesialis Paru (Sp.P). Kelemahan seluler sistemik ini berisiko memperparah kandidiasis oral di mulut akibat imunosupresi lokal. Segera cetak Surat Rujukan Medis di bagian bawah platform.`;
+            } else if (selectedSputumType === 'purulen') {
+                message = `⚠️ <strong>PERHATIAN KLINIS:</strong> Dahak kuning/hijau kental menunjukkan adanya infeksi sekunder di sistem respirasi. Bersamaan dengan penggunaan inhaler kortikosteroid, kondisi ini memicu disregulasi mikroba rongga mulut. Disarankan berkumur 3x sehari dengan Phytomouthwash Mucoshield-TB untuk mereduksi biofilm Candida mulut dan menstabilkan pH.`;
+            } else if (selectedSputumType === 'mukoid') {
+                message = `💡 <strong>PEDOMAN PROTEKSI MUKOSA:</strong> Dahak putih lengket berkorelasi erat dengan kurangnya hidrasi dan sekresi saliva yang minim. Mulut kering (xerostomia) sangat memicu Candida albicans bermutasi menjadi hifa invasif. Segera tingkatkan minum air putih minimal 2.5 liter per hari dan kumur teratur dengan sediaan phytomouthwash pasca inhalasi.`;
+            } else {
+                message = `✅ <strong>EVALUASI AMAN:</strong> Ketahanan mukosa respirasi Anda berada dalam batas normal. Tetap jaga kebersihan mulut pasca menghirup obat kortikosteroid guna mencegah akumulasi sisa steroid yang memicu timbulnya oral thrush.`;
+            }
+
+            actionText.innerHTML = message;
+            actionBox.classList.remove('hidden');
+            actionBox.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // KST-TBC Community Health Hub
+        const pmoDatabase = {
+            "Malang": { name: "Bpk. Budi Santoso, S.Kep", unit: "Puskesmas Dinoyo Malang", phone: "6281331965094" },
+            "Surabaya": { name: "Ibu Hartati, Amd.Keb", unit: "Puskesmas Mulyorejo Surabaya", phone: "6281331965094" },
+            "Jakarta": { name: "Ns. Ahmad Ridwan, S.Kep", unit: "Puskesmas Kecamatan Pulogadung", phone: "6281331965094" },
+            "Yogyakarta": { name: "Ibu Sri Wahyuni, S.Tr.Kep", unit: "Puskesmas Mlati I Sleman", phone: "6281331965094" },
+            "Bandung": { name: "Bpk. Dadang Hermawan, Amd.Kep", unit: "Puskesmas Coblong Bandung", phone: "6281331965094" }
+        };
+
+        function findPMOMatch() {
+            const matchedRegion = globalUser.region || "Malang";
+            const pmo = pmoDatabase[matchedRegion] || pmoDatabase["Malang"];
+
+            document.getElementById('pmo-name').textContent = pmo.name;
+            document.getElementById('pmo-unit').textContent = pmo.unit;
+            
+            // Build custom wa link with personalized message
+            const message = encodeURIComponent(`Assalamualaikum Wr. Wb. Halo ${pmo.name}, saya adalah peserta KST-TBC dari wilayah ${matchedRegion}. Mohon bantuannya untuk mendampingi kepatuhan minum obat dan penggunaan phytomouthwash saya.`);
+            const link = `https://api.whatsapp.com/send?phone=${pmo.phone}&text=${message}`;
+            
+            document.getElementById('pmo-contact-link').href = link;
+            document.getElementById('pmo-match-result').classList.remove('hidden');
+
+            showCustomNotification(`PMO daerah ${matchedRegion} berhasil ditemukan!`);
+        }
+
+        function submitPledgeToWall(event) {
             event.preventDefault();
             const school = document.getElementById('pledge-school').value.trim();
-            const vision = document.getElementById('pledge-vision').value.trim();
-            if (!school || !vision) return;
+            const quote = document.getElementById('pledge-vision').value.trim();
+            if (!school || !quote) return;
 
-            document.getElementById('pledge-card-name').textContent = globalUser.name.toUpperCase();
-            document.getElementById('pledge-card-school').textContent = `Sekolah: ${school} (${globalUser.region})`;
-            document.getElementById('pledge-card-text').textContent = `"${vision}"`;
+            const name = globalUser.name || "Ksatria KST-TBC";
+            const feed = document.getElementById('wall-of-hope-feed');
+            
+            // Create element with elegant sliding entry animation
+            const item = document.createElement('div');
+            item.className = "p-2.5 bg-gradient-to-r from-brand-50 to-amber-50 border-l-4 border-brand-500 rounded-lg text-[10px] space-y-0.5 animate-pulse text-left";
+            item.innerHTML = `
+                <span class="font-black text-slate-950 block">${name} - ${school}</span>
+                <p class="text-slate-900 font-medium italic">"${quote}"</p>
+            `;
+            
+            // Add to top of list
+            feed.insertBefore(item, feed.firstChild);
 
+            // Clean inputs
             document.getElementById('pledge-school').value = "";
             document.getElementById('pledge-vision').value = "";
-            document.getElementById('community-badge').classList.remove('hidden');
 
-            showCustomNotification("Ikrar Komitmen Tuntas TBC Berhasil! Anda Tergabung di KST-TBC.");
+            showCustomNotification("Komitmen Anda berhasil dipajang di Dinding Harapan KST-TBC!");
         }
 
-        // Feature 10: Referral System Check
+        function generateAdvocateCard() {
+            const name = globalUser.name || "Pejuang Sehat";
+            const region = globalUser.region || "Malang";
+            const school = document.getElementById('pledge-school').value.trim() || "Masyarakat Umum";
+
+            document.getElementById('badge-card-name').textContent = name.toUpperCase();
+            document.getElementById('badge-card-school').textContent = `${school} (${region})`;
+            
+            document.getElementById('digital-advocate-badge').classList.remove('hidden');
+            showCustomNotification("Kartu Anggota Digital KST-TBC berhasil dibuat!");
+        }
+
+        // Smart Referral System
         function checkClinicalReferral() {
-            let scoreVal = parseInt(document.getElementById('adherence-score-val').textContent) || 0;
             let wtLoss = document.getElementById('nut-wt-loss').value;
 
-            const statusNode = document.getElementById('ref-status');
-            const targetNode = document.getElementById('ref-target');
-            const descNode = document.getElementById('ref-desc');
+            // Generate Random Referral Letter Number
+            const randomNum = Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('ref-letter-number').textContent = `REF/MSTB/2026/${randomNum}`;
 
-            if (wtLoss === 'banyak' || scoreVal < 50) {
-                statusNode.textContent = "Kritis / Segera Hubungi Dokter";
-                statusNode.className = "text-danger-500 font-black uppercase text-xs";
-                targetNode.textContent = "Dokter Spesialis Paru & Spesialis Penyakit Mulut";
-                descNode.textContent = `Peringatan! Berdasarkan parameter berat badan Anda yang menyusut drastis disertai dengan tingkat kepatuhan minum OAT / kumur yang berada di bawah standar (di bawah 50%), Anda memiliki indikasi kegagalan sirkuit penyerapan nutrisi akibat infeksi jamur Candida yang meluas. Mohon segera membawa lembar rujukan tercetak ini ke Puskesmas Mitra TBC terdekat untuk penanganan klinis komprehensif.`;
-            } else {
-                statusNode.textContent = "Status Terapi Terkontrol";
-                statusNode.className = "text-phyto-600 font-black uppercase text-xs";
-                targetNode.textContent = "Evaluasi Mandiri Rawat Jalan";
-                descNode.textContent = `Status kesehatan rongga mulut dan perkembangan terapi paru Anda terhitung aman dan dalam pantauan mandiri yang baik. Tetap gunakan phytomouthwash Mucoshield-TB setelah pemakaian sediaan hirup steroid Anda guna memastikan lingkungan oral terbebas dari keasaman mikroba jamur.`;
-            }
+            // Populate Patient Details
+            document.getElementById('ref-letter-name').textContent = globalUser.name || "Ahmad Wijaya";
+            document.getElementById('ref-letter-age-gender').textContent = `${globalUser.age || 28} Tahun / ${globalUser.gender === 'L' ? 'Laki-laki' : 'Perempuan'}`;
+            document.getElementById('ref-letter-region').textContent = globalUser.region || "Malang";
+            document.getElementById('ref-letter-height-weight').textContent = `${globalUser.height || 165} cm / ${globalUser.weight || 58} kg`;
+
+            // Compute BMI
+            let heightM = (globalUser.height || 165) / 100;
+            let bmiVal = (globalUser.weight || 58) / (heightM * heightM);
+            document.getElementById('ref-letter-bmi').textContent = `${bmiVal.toFixed(1)} (${bmiVal < 18.5 ? 'Gizi Kurang' : (bmiVal >= 25 ? 'Overweight' : 'Normal')})`;
+            document.getElementById('ref-letter-diabetes').textContent = globalUser.diabetes === 'ada' ? 'Ada (Diabetes Melitus)' : 'Tidak Ada';
+
+            // Populate Clinical Info
+            document.getElementById('ref-letter-tb-dur').textContent = `${globalUser.tbDuration || 2} Bulan`;
+            document.getElementById('ref-letter-inhaler').textContent = globalUser.inhalerType === 'ics' ? 'ICS (Kortikosteroid)' : 'Non-Steroid/Tanpa Inhaler';
+            document.getElementById('ref-letter-smoking').textContent = globalUser.smoking === 'aktif' ? 'Perokok Aktif' : 'Bukan Perokok';
+
+            // Pull AI Screening score
+            const riskValueText = document.getElementById('risk-score-value').textContent || "45%";
+            document.getElementById('ref-letter-risk-score').textContent = riskValueText;
+
+            // Get self-assessment symptom points
+            const symptomBadgeText = document.getElementById('self-assess-score-badge').textContent || "25 Poin";
+            document.getElementById('ref-letter-symptom-score').textContent = symptomBadgeText;
+            document.getElementById('ref-letter-nut-risk').textContent = wtLoss === 'banyak' ? "Tinggi / Kritis" : "Sedang / Normal";
+
+            // Sputum pattern status
+            document.getElementById('ref-letter-sputum-status').textContent = selectedSputumType ? selectedSputumType.toUpperCase() : "Belum Dianalisis";
+
+            // Dynamic Regional Hospital & Puskesmas Mapping based on User Location
+            const matchedRegion = globalUser.region || "Malang";
+            const hospitalData = regionalHospitals[matchedRegion] || regionalHospitals["Malang"];
+
+            document.getElementById('ref-hospital-name').textContent = hospitalData.name;
+            document.getElementById('ref-hospital-address').textContent = hospitalData.address;
+            document.getElementById('ref-hospital-contact').textContent = `Kontak Layanan: ${hospitalData.contact}`;
+            document.getElementById('ref-puskesmas-name').textContent = hospitalData.puskesmas;
 
             document.getElementById('referral-output-panel').classList.remove('hidden');
-            showCustomNotification("Nota Rujukan Tergenerate.");
+            
+            // Scroll smoothly to output
+            document.getElementById('referral-output-panel').scrollIntoView({ behavior: 'smooth' });
+            showCustomNotification("Surat Rujukan Medis Terstruktur Berhasil Tergenerate!");
         }
 
         // Custom Notification Toast
