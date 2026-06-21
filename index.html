@@ -1678,28 +1678,42 @@
         function handleRegistration(event) {
             event.preventDefault();
             
-            globalUser.name = document.getElementById('reg-name').value.trim();
-            globalUser.age = parseInt(document.getElementById('reg-age').value.trim());
-            globalUser.gender = document.getElementById('reg-gender').value;
-            globalUser.region = document.getElementById('reg-region').value;
-            globalUser.height = parseInt(document.getElementById('reg-height').value.trim());
-            globalUser.weight = parseInt(document.getElementById('reg-weight').value.trim());
-            globalUser.tbHistory = document.getElementById('reg-tb-history').value;
-            globalUser.tbDuration = parseInt(document.getElementById('reg-tb-duration').value.trim());
-            globalUser.inhalerType = document.getElementById('reg-inhaler-type').value;
-            globalUser.diabetes = document.getElementById('reg-diabetes').value;
-            globalUser.smoking = document.getElementById('reg-smoking').value;
-            globalUser.prevThrush = document.getElementById('reg-prev-thrush').value;
+            try {
+                globalUser.name = document.getElementById('reg-name').value.trim();
+                globalUser.age = parseInt(document.getElementById('reg-age').value.trim());
+                globalUser.gender = document.getElementById('reg-gender').value;
+                globalUser.region = document.getElementById('reg-region').value;
+                globalUser.height = parseInt(document.getElementById('reg-height').value.trim());
+                globalUser.weight = parseInt(document.getElementById('reg-weight').value.trim());
+                globalUser.tbHistory = document.getElementById('reg-tb-history').value;
+                globalUser.tbDuration = parseInt(document.getElementById('reg-tb-duration').value.trim());
+                globalUser.inhalerType = document.getElementById('reg-inhaler-type').value;
+                globalUser.diabetes = document.getElementById('reg-diabetes').value;
+                globalUser.smoking = document.getElementById('reg-smoking').value;
+                globalUser.prevThrush = document.getElementById('reg-prev-thrush').value;
 
-            // Update UI Badges
-            document.getElementById('registered-user-badge').textContent = `Profil: ${globalUser.name} (${globalUser.region})`;
-            document.getElementById('welcome-user-text').textContent = `Selamat Datang, ${globalUser.name} - Wilayah Terapi: ${globalUser.region}`;
+                // Update UI Badges Safely
+                const userBadge = document.getElementById('registered-user-badge');
+                if (userBadge) {
+                    userBadge.textContent = `Profil: ${globalUser.name} (${globalUser.region})`;
+                }
 
-            // Dismiss gateway modal
-            document.getElementById('entry-gate-modal').classList.add('hidden');
+                const welcomeText = document.getElementById('welcome-user-text');
+                if (welcomeText) {
+                    welcomeText.textContent = `Selamat Datang, ${globalUser.name} - Wilayah Terapi: ${globalUser.region}`;
+                }
 
-            // Send notification
-            showCustomNotification(`Profil ${globalUser.name} Terkonfigurasi dengan Sukses!`);
+                // Dismiss gateway modal
+                const entryModal = document.getElementById('entry-gate-modal');
+                if (entryModal) {
+                    entryModal.classList.add('hidden');
+                }
+
+                // Send notification
+                showCustomNotification(`Profil ${globalUser.name} Terkonfigurasi dengan Sukses!`);
+            } catch (error) {
+                console.error("Gagal melakukan konfigurasi profil awal:", error);
+            }
         }
 
         // Mobile Menu Navigation Controls
@@ -2267,55 +2281,64 @@
 
         // Smart Referral System
         function checkClinicalReferral() {
-            let wtLoss = document.getElementById('nut-wt-loss').value;
+            try {
+                let wtLoss = document.getElementById('nut-wt-loss').value;
 
-            // Generate Random Referral Letter Number
-            const randomNum = Math.floor(1000 + Math.random() * 9000);
-            document.getElementById('ref-letter-number').textContent = `REF/MSTB/2026/${randomNum}`;
+                // Generate Random Referral Letter Number
+                const randomNum = Math.floor(1000 + Math.random() * 9000);
+                document.getElementById('ref-letter-number').textContent = `REF/MSTB/2026/${randomNum}`;
 
-            // Populate Patient Details
-            document.getElementById('ref-letter-name').textContent = globalUser.name || "Ahmad Wijaya";
-            document.getElementById('ref-letter-age-gender').textContent = `${globalUser.age || 28} Tahun / ${globalUser.gender === 'L' ? 'Laki-laki' : 'Perempuan'}`;
-            document.getElementById('ref-letter-region').textContent = globalUser.region || "Malang";
-            document.getElementById('ref-letter-height-weight').textContent = `${globalUser.height || 165} cm / ${globalUser.weight || 58} kg`;
+                // Populate Patient Details
+                document.getElementById('ref-letter-name').textContent = globalUser.name || "Ahmad Wijaya";
+                document.getElementById('ref-letter-age-gender').textContent = `${globalUser.age || 28} Tahun / ${globalUser.gender === 'L' ? 'Laki-laki' : 'Perempuan'}`;
+                document.getElementById('ref-letter-region').textContent = globalUser.region || "Malang";
+                document.getElementById('ref-letter-height-weight').textContent = `${globalUser.height || 165} cm / ${globalUser.weight || 58} kg`;
 
-            // Compute BMI
-            let heightM = (globalUser.height || 165) / 100;
-            let bmiVal = (globalUser.weight || 58) / (heightM * heightM);
-            document.getElementById('ref-letter-bmi').textContent = `${bmiVal.toFixed(1)} (${bmiVal < 18.5 ? 'Gizi Kurang' : (bmiVal >= 25 ? 'Overweight' : 'Normal')})`;
-            document.getElementById('ref-letter-diabetes').textContent = globalUser.diabetes === 'ada' ? 'Ada (Diabetes Melitus)' : 'Tidak Ada';
+                // Compute BMI
+                let heightM = (globalUser.height || 165) / 100;
+                let bmiVal = (globalUser.weight || 58) / (heightM * heightM);
+                document.getElementById('ref-letter-bmi').textContent = `${bmiVal.toFixed(1)} (${bmiVal < 18.5 ? 'Gizi Kurang' : (bmiVal >= 25 ? 'Overweight' : 'Normal')})`;
+                document.getElementById('ref-letter-diabetes').textContent = globalUser.diabetes === 'ada' ? 'Ada (Diabetes Melitus)' : 'Tidak Ada';
 
-            // Populate Clinical Info
-            document.getElementById('ref-letter-tb-dur').textContent = `${globalUser.tbDuration || 2} Bulan`;
-            document.getElementById('ref-letter-inhaler').textContent = globalUser.inhalerType === 'ics' ? 'ICS (Kortikosteroid)' : 'Non-Steroid/Tanpa Inhaler';
-            document.getElementById('ref-letter-smoking').textContent = globalUser.smoking === 'aktif' ? 'Perokok Aktif' : 'Bukan Perokok';
+                // Populate Clinical Info
+                document.getElementById('ref-letter-tb-dur').textContent = `${globalUser.tbDuration || 2} Bulan`;
+                document.getElementById('ref-letter-inhaler').textContent = globalUser.inhalerType === 'ics' ? 'ICS (Kortikosteroid)' : 'Non-Steroid/Tanpa Inhaler';
+                document.getElementById('ref-letter-smoking').textContent = globalUser.smoking === 'aktif' ? 'Perokok Aktif' : 'Bukan Perokok';
 
-            // Pull AI Screening score
-            const riskValueText = document.getElementById('risk-score-value').textContent || "45%";
-            document.getElementById('ref-letter-risk-score').textContent = riskValueText;
+                // Pull AI Screening score
+                const riskValueText = document.getElementById('risk-score-value').textContent || "45%";
+                document.getElementById('ref-letter-risk-score').textContent = riskValueText;
 
-            // Get self-assessment symptom points
-            const symptomBadgeText = document.getElementById('self-assess-score-badge').textContent || "25 Poin";
-            document.getElementById('ref-letter-symptom-score').textContent = symptomBadgeText;
-            document.getElementById('ref-letter-nut-risk').textContent = wtLoss === 'banyak' ? "Tinggi / Kritis" : "Sedang / Normal";
+                // Get self-assessment symptom points
+                const symptomBadgeText = document.getElementById('self-assess-score-badge').textContent || "25 Poin";
+                document.getElementById('ref-letter-symptom-score').textContent = symptomBadgeText;
 
-            // Sputum pattern status
-            document.getElementById('ref-letter-sputum-status').textContent = selectedSputumType ? selectedSputumType.toUpperCase() : "Belum Dianalisis";
+                // Safely update optional elements if they exist
+                const refNutRisk = document.getElementById('ref-letter-nut-risk');
+                if (refNutRisk) {
+                    refNutRisk.textContent = wtLoss === 'banyak' ? "Tinggi / Kritis" : "Sedang / Normal";
+                }
 
-            // Dynamic Regional Hospital & Puskesmas Mapping based on User Location
-            const matchedRegion = globalUser.region || "Malang";
-            const hospitalData = regionalHospitals[matchedRegion] || regionalHospitals["Malang"];
+                // Sputum pattern status
+                document.getElementById('ref-letter-sputum-status').textContent = selectedSputumType ? selectedSputumType.toUpperCase() : "Belum Dianalisis";
 
-            document.getElementById('ref-hospital-name').textContent = hospitalData.name;
-            document.getElementById('ref-hospital-address').textContent = hospitalData.address;
-            document.getElementById('ref-hospital-contact').textContent = `Kontak Layanan: ${hospitalData.contact}`;
-            document.getElementById('ref-puskesmas-name').textContent = hospitalData.puskesmas;
+                // Dynamic Regional Hospital & Puskesmas Mapping based on User Location
+                const matchedRegion = globalUser.region || "Malang";
+                const hospitalData = regionalHospitals[matchedRegion] || regionalHospitals["Malang"];
 
-            document.getElementById('referral-output-panel').classList.remove('hidden');
-            
-            // Scroll smoothly to output
-            document.getElementById('referral-output-panel').scrollIntoView({ behavior: 'smooth' });
-            showCustomNotification("Surat Rujukan Medis Terstruktur Berhasil Tergenerate!");
+                document.getElementById('ref-hospital-name').textContent = hospitalData.name;
+                document.getElementById('ref-hospital-address').textContent = hospitalData.address;
+                document.getElementById('ref-hospital-contact').textContent = `Kontak Layanan: ${hospitalData.contact}`;
+                document.getElementById('ref-puskesmas-name').textContent = hospitalData.puskesmas;
+
+                document.getElementById('referral-output-panel').classList.remove('hidden');
+                
+                // Scroll smoothly to output
+                document.getElementById('referral-output-panel').scrollIntoView({ behavior: 'smooth' });
+                showCustomNotification("Surat Rujukan Medis Terstruktur Berhasil Tergenerate!");
+            } catch (error) {
+                console.error("Gagal menjaring rujukan medis pintar:", error);
+            }
         }
 
         // Custom Notification Toast
