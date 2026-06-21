@@ -1,0 +1,1931 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUCOSHIELD-TB - Smart Mucoadhesive Phytomouthwash Platform</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fff7ed', // Soft orange/peach bg
+                            100: '#ffedd5',
+                            200: '#fed7aa',
+                            500: '#f97316', // Bright Orange
+                            600: '#ea580c',
+                            700: '#c2410c',
+                            800: '#9a3412',
+                            900: '#7c2d12',
+                            950: '#431407',
+                        },
+                        phyto: {
+                            50: '#fefce8', // Soft warm yellow bg
+                            100: '#fef9c3',
+                            500: '#eab308', // Gold Yellow (representing Sembung/Sirih essence)
+                            600: '#ca8a04',
+                            800: '#854d0e',
+                        },
+                        warning: {
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        },
+                        danger: {
+                            500: '#ef4444',
+                            600: '#dc2626',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fffcf9; /* Soft warm peach background */
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid rgba(249, 115, 22, 0.2); /* Enhanced orange border */
+        }
+        .scanner-line {
+            animation: scan 2s linear infinite;
+        }
+        @keyframes scan {
+            0% { top: 0%; }
+            50% { top: 100%; }
+            100% { top: 0%; }
+        }
+    </style>
+</head>
+<body class="text-slate-950 min-h-screen selection:bg-brand-500 selection:text-white overflow-x-hidden font-semibold">
+
+    <!-- Mandatory Entry Gate Registration Modal -->
+    <div id="entry-gate-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-brand-950/60 backdrop-blur-md">
+        <div class="glass-card max-w-2xl w-full p-6 sm:p-8 rounded-3xl shadow-2xl space-y-6 relative overflow-hidden bg-white">
+            <div class="absolute inset-0 bg-gradient-to-tr from-brand-100/40 via-transparent to-phyto-100/30"></div>
+            
+            <div class="relative z-10 space-y-4">
+                <div class="flex items-center space-x-3 justify-center">
+                    <div class="w-12 h-12 bg-gradient-to-tr from-brand-600 to-phyto-500 rounded-xl flex items-center justify-center shadow-lg">
+                        <i data-lucide="shield-alert" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <div class="text-left">
+                        <h2 class="text-2xl font-black tracking-wider text-brand-950">MUCOSHIELD-TB PORTAL</h2>
+                        <p class="text-xs text-phyto-600 font-extrabold uppercase tracking-widest">Sistem Pendukung Klinis Terapi Tuberkulosis</p>
+                    </div>
+                </div>
+                
+                <p class="text-xs text-slate-950 font-bold text-center max-w-lg mx-auto">
+                    Selamat datang di sistem kepatuhan terapi TBC dan mitigasi kandidiasis oral (*oral thrush*). Sebelum mengakses platform, silakan lengkapi profil klinis awal Anda secara rahasia dan aman.
+                </p>
+
+                <form id="entry-gate-form" onsubmit="handleRegistration(event)" class="space-y-4 text-left pt-2">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+                        <div>
+                            <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">Nama Lengkap</label>
+                            <input type="text" id="reg-name" required placeholder="Contoh: Ahmad Wijaya" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-3 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">Usia (Tahun)</label>
+                            <input type="number" id="reg-age" required min="5" max="100" placeholder="Contoh: 28" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-3 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">Jenis Kelamin</label>
+                            <select id="reg-gender" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-3 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                                <option value="L">Laki-laki</option>
+                                <option value="P">Perempuan</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+                        <div>
+                            <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">Asal Daerah (Kab/Kota)</label>
+                            <input type="text" id="reg-region" required placeholder="Contoh: Malang" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-3 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">Tinggi Badan (cm)</label>
+                            <input type="number" id="reg-height" required min="80" max="250" placeholder="165" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-3 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">Berat Badan (kg)</label>
+                            <input type="number" id="reg-weight" required min="20" max="200" placeholder="58" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-3 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+                        <div>
+                            <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">Riwayat TBC</label>
+                            <select id="reg-tb-history" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-3 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                                <option value="baru">Kasus Baru (Terapi berjalan)</option>
+                                <option value="kambuh">Kasus Kambuh (Relapse)</option>
+                                <option value="mdr">TBC Kebal Obat (MDR-TB)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">Lama Terapi TBC (Bulan)</label>
+                            <input type="number" id="reg-tb-duration" required min="0" max="24" placeholder="Contoh: 2" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-3 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">Jenis Inhaler Terapi</label>
+                            <select id="reg-inhaler-type" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-3 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                                <option value="ics">Kortikosteroid Hirup (ICS)</option>
+                                <option value="bronkodilator">Bronkodilator Saja (Tanpa Steroid)</option>
+                                <option value="none">Tidak Menggunakan Inhaler</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+                        <div>
+                            <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">Riwayat Diabetes</label>
+                            <select id="reg-diabetes" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-3 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                                <option value="tidak">Tidak Ada</option>
+                                <option value="ada">Ada (Diabetes Melitus)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">Status Merokok</label>
+                            <select id="reg-smoking" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-3 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                                <option value="tidak">Bukan Perokok</option>
+                                <option value="aktif">Perokok Aktif</option>
+                                <option value="pasif">Perokok Pasif</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">Riwayat Oral Thrush Sebelumnya</label>
+                            <select id="reg-prev-thrush" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-3 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                                <option value="tidak">Tidak Pernah</option>
+                                <option value="pernah">Pernah Terjadi</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-2 pt-2">
+                        <input type="checkbox" required class="mt-1 rounded border-brand-400 text-brand-600 focus:ring-brand-500">
+                        <p class="text-[10px] text-slate-950 font-black leading-normal">Saya menyetujui data biologis diproses secara aman untuk membentuk basis prediksi kepatuhan & risiko infeksi jamur Candida.</p>
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-gradient-to-r from-brand-600 to-phyto-500 hover:from-brand-700 hover:to-phyto-600 text-white font-black uppercase text-xs tracking-widest py-3.5 rounded-xl transition-all shadow-md">
+                        Konfigurasi Profil Kesehatan Pasien
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass border-b-2 border-brand-100 transition-all duration-300 bg-white/95">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-tr from-brand-600 to-phyto-500 text-white p-2.5 rounded-xl shadow-md">
+                    <i data-lucide="droplet" class="w-6 h-6 animate-pulse"></i>
+                </div>
+                <div>
+                    <span class="font-black text-xl tracking-wider text-brand-950 uppercase flex items-center gap-1">
+                        MUCOSHIELD<span class="text-brand-600">-TB</span>
+                    </span>
+                    <p class="text-[9px] text-brand-600 uppercase tracking-widest font-black leading-none">Smart Mucoadhesive Phytomouthwash Platform</p>
+                </div>
+            </div>
+
+            <!-- Main Nav Items -->
+            <nav class="hidden xl:flex space-x-5 text-[10px] font-black uppercase tracking-wider text-slate-950">
+                <a href="#beranda" class="hover:text-brand-600 transition-colors">Beranda</a>
+                <a href="#skrining" class="hover:text-brand-600 transition-colors">Risk Screen</a>
+                <a href="#indicator" class="hover:text-brand-600 transition-colors">pH Tech</a>
+                <a href="#assessment" class="hover:text-brand-600 transition-colors">Self-Assess</a>
+                <a href="#photo-scan" class="hover:text-brand-600 transition-colors">Photo Screen</a>
+                <a href="#reminders" class="hover:text-brand-600 transition-colors">TB Reminders</a>
+                <a href="#adherence" class="hover:text-brand-600 transition-colors">Progress</a>
+                <a href="#nutrisi" class="hover:text-brand-600 transition-colors">Nutrition</a>
+                <a href="#prediction" class="hover:text-brand-600 transition-colors">TB Predict</a>
+                <a href="#community" class="hover:text-brand-600 transition-colors">Community</a>
+                <a href="#referrals" class="hover:text-brand-700 transition-colors bg-brand-100 text-brand-900 px-3 py-1.5 rounded-lg border-2 border-brand-200">10. Referral</a>
+            </nav>
+
+            <div class="hidden sm:flex items-center space-x-2 bg-brand-100 border-2 border-brand-300 px-3.5 py-1.5 rounded-full">
+                <span class="w-2 h-2 bg-brand-500 rounded-full animate-ping"></span>
+                <span id="registered-user-badge" class="text-[9px] text-brand-900 font-black uppercase tracking-widest">Memuat Profil...</span>
+            </div>
+
+            <button id="mobile-menu-btn" class="xl:hidden text-slate-950 hover:text-brand-600 focus:outline-none">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="hidden xl:hidden border-t-2 border-brand-100 bg-white px-4 pt-2 pb-6 space-y-2">
+            <a href="#beranda" class="block px-3 py-2.5 rounded-lg text-sm text-slate-950 hover:bg-brand-50 font-black">Beranda</a>
+            <a href="#skrining" class="block px-3 py-2.5 rounded-lg text-sm text-slate-950 hover:bg-brand-50 font-black">Risk Screen</a>
+            <a href="#indicator" class="block px-3 py-2.5 rounded-lg text-sm text-slate-950 hover:bg-brand-50 font-black">pH Tech</a>
+            <a href="#assessment" class="block px-3 py-2.5 rounded-lg text-sm text-slate-950 hover:bg-brand-50 font-black">Self-Assess</a>
+            <a href="#photo-scan" class="block px-3 py-2.5 rounded-lg text-sm text-slate-950 hover:bg-brand-50 font-black">Photo Screen</a>
+            <a href="#reminders" class="block px-3 py-2.5 rounded-lg text-sm text-slate-950 hover:bg-brand-50 font-black">TB Reminders</a>
+            <a href="#adherence" class="block px-3 py-2.5 rounded-lg text-sm text-slate-950 hover:bg-brand-50 font-black">Progress Score</a>
+            <a href="#nutrisi" class="block px-3 py-2.5 rounded-lg text-sm text-slate-950 hover:bg-brand-50 font-black">Nutrition Risk</a>
+            <a href="#prediction" class="block px-3 py-2.5 rounded-lg text-sm text-slate-950 hover:bg-brand-50 font-black">TB Predict</a>
+            <a href="#community" class="block px-3 py-2.5 rounded-lg text-sm text-slate-950 hover:bg-brand-50 font-black">Community Health</a>
+            <a href="#referrals" class="block px-3 py-2.5 rounded-lg text-sm text-brand-900 bg-brand-50 border-2 border-brand-200 font-black">Smart Referral</a>
+        </div>
+    </header>
+
+    <main class="pt-20">
+
+        <!-- Hero Section -->
+        <section id="beranda" class="relative overflow-hidden py-16 lg:py-24 bg-gradient-to-b from-brand-50 via-white to-brand-50/50">
+            <div class="absolute inset-0">
+                <div class="absolute w-[400px] h-[400px] bg-brand-200/40 rounded-full blur-[100px] -top-10 -left-10"></div>
+                <div class="absolute w-[400px] h-[400px] bg-phyto-100/30 rounded-full blur-[100px] bottom-10 right-10"></div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    
+                    <!-- Left Hero Core Content -->
+                    <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                        <span class="inline-flex items-center space-x-1.5 bg-brand-100 border-2 border-brand-300 text-brand-800 text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider">
+                            <i data-lucide="heart" class="w-4 h-4 text-brand-600"></i>
+                            <span id="welcome-user-text" class="text-brand-900">Memuat Sistem Pelayanan Kesehatan...</span>
+                        </span>
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-none text-slate-950 uppercase">
+                            Smart Mucoadhesive <span class="bg-gradient-to-r from-brand-600 to-phyto-500 bg-clip-text text-transparent">PHYTOMOUTHWASH</span>
+                        </h1>
+                        <p class="text-sm sm:text-base text-slate-950 font-bold leading-relaxed">
+                            Formulasi inovatif berbasis nanoenkapsulasi **Daun Sembung** (*Blumea balsamifera*) dan **Daun Sirih** (*Piper betle*) sebagai agen antimikroba alami, mucoadhesive tinggi, dan pengkondisi pH rongga mulut untuk mencegah infeksi sekunder *Candida albicans* serta menjaga ketahanan fisik paru demi mendukung terapi Tuberkulosis yang optimal.
+                        </p>
+                        
+                        <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                            <a href="#skrining" class="w-full sm:w-auto text-center bg-brand-600 hover:bg-brand-700 text-white font-black uppercase text-xs tracking-wider px-8 py-4 rounded-xl shadow-lg transition-all duration-300">
+                                Mulai Deteksi Oral Thrush
+                            </a>
+                            <a href="#photo-scan" class="w-full sm:w-auto text-center border-2 border-brand-200 bg-white hover:bg-brand-50 text-brand-700 font-black uppercase text-xs tracking-wider px-8 py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm">
+                                <i data-lucide="camera" class="w-4 h-4 text-brand-500"></i> Photo Scan AI
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Right Hero Visual Panel (WHO TB Quote) -->
+                    <div class="lg:col-span-5 space-y-6">
+                        <!-- Inspiring Tuberculosis Quote Card -->
+                        <div class="glass-card rounded-2xl p-6 border-l-4 border-l-brand-500 relative overflow-hidden shadow-md bg-white">
+                            <i data-lucide="quote" class="w-10 h-10 text-brand-500/15 absolute top-4 right-4"></i>
+                            
+                            <p class="text-xs sm:text-sm text-slate-950 italic leading-relaxed font-black">
+                                "Tuberculosis is both a cause and a consequence of poverty."<br>
+                                <span class="text-[11px] block mt-2 text-brand-700 not-italic">("Tuberkulosis adalah penyebab sekaligus akibat dari kemiskinan.")</span>
+                            </p>
+                            <div class="mt-4 flex items-center gap-3">
+                                <div class="w-8 h-8 bg-gradient-to-tr from-brand-600 to-phyto-500 rounded-full flex items-center justify-center text-white font-black text-[10px] shadow">
+                                    WHO
+                                </div>
+                                <div>
+                                    <h4 class="text-xs font-black uppercase tracking-wider text-slate-950">World Health Organization</h4>
+                                    <p class="text-[9px] text-brand-700 font-black">Global Health Determinant & Social Advocacy</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Active Security Stats Node -->
+                        <div class="glass-card rounded-2xl p-4 border-2 border-brand-200 flex items-center justify-between text-xs sm:text-sm bg-white">
+                            <div class="flex items-center gap-3">
+                                <div class="bg-brand-500/10 text-brand-600 p-2.5 rounded-xl">
+                                    <i data-lucide="droplet" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-black text-slate-950">Teknologi Nanoenkapsulasi</h4>
+                                    <p class="text-[10px] text-brand-900 font-bold">Rilis Lambat & Penghantaran Zat Mukosa Optimal</p>
+                                </div>
+                            </div>
+                            <span class="bg-brand-100 border-2 border-brand-300 text-brand-800 font-black text-xs px-3 py-1 rounded-full">
+                                Phyto-Tech
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Scientific Phytochemical Synergy Education -->
+        <section id="biologi-sains" class="py-16 bg-white border-t-2 border-brand-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="bg-brand-100 border-2 border-brand-200 text-brand-700 text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider animate-pulse">
+                        Sinergi Molekuler • Phytochemical Science
+                    </span>
+                    <h2 class="text-3xl font-black text-brand-950 mt-4 uppercase">Sains Bioaktif Sembung & Sirih</h2>
+                    <p class="text-brand-950 mt-2 text-xs sm:text-sm font-bold">
+                        Mekanisme fito-farmakologis nanoenkapsulasi zat aktif alami dalam mengeliminasi struktur spora *Candida albicans* serta membentuk lapisan pelindung mukosa mulut.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Daun Sembung Card -->
+                    <div class="glass-card rounded-3xl p-6 sm:p-8 border-2 border-brand-200 bg-gradient-to-br from-white to-brand-50/40 shadow-xl space-y-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-20 h-20 bg-amber-50 rounded-2xl flex items-center justify-center border-2 border-brand-200 shrink-0">
+                                <svg class="w-16 h-16 text-emerald-600" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M50 85C50 85 20 60 20 38C20 18 35 15 50 25C65 15 80 18 80 38C80 60 50 85 50 85Z" fill="#34d399" fill-opacity="0.2" stroke="#059669" stroke-width="2.5" stroke-linejoin="round"/>
+                                    <path d="M50 25V85" stroke="#047857" stroke-width="2"/>
+                                    <path d="M50 40C58 38 68 40 72 45M50 55C58 53 68 55 74 62M50 70C56 68 64 70 68 76" stroke="#047857" stroke-width="1.5" stroke-linecap="round"/>
+                                    <path d="M50 40C42 38 32 40 28 45M50 55C42 53 32 55 26 62M50 70C44 68 36 70 32 76" stroke="#047857" stroke-width="1.5" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-black text-slate-950 uppercase">Daun Sembung</h3>
+                                <p class="text-xs text-brand-700 italic font-black">Blumea balsamifera</p>
+                                <span class="inline-block mt-1 text-[10px] bg-brand-100 text-brand-900 font-black px-2 py-0.5 rounded">Mucoadhesive & Anti-inflamasi</span>
+                            </div>
+                        </div>
+                        
+                        <p class="text-xs text-slate-950 font-bold leading-relaxed">
+                            Ekstrak daun Sembung kaya akan senyawa terpenoid bioaktif **L-Borneol** yang berkhasiat memicu vasodilatasi lokal, mempercepat regenerasi epitelium mukosa mulut yang terkelupas akibat sariawan jamur, serta berperan sebagai polimer mukoadesif alami penyusun sediaan mulut.
+                        </p>
+
+                        <!-- Chemical Structure SVG Borneol -->
+                        <div class="bg-white rounded-2xl p-4 border-2 border-brand-100 space-y-2">
+                            <span class="text-[9px] font-black uppercase text-brand-700 tracking-wider block">Struktur Senyawa: L-Borneol (Bicyclic Terpene)</span>
+                            <div class="h-28 flex items-center justify-center">
+                                <svg class="w-32 h-24 text-slate-800" viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M60 20L85 35V65L60 80L35 65V35L60 20Z" stroke="#ea580c" stroke-width="2.5" stroke-linejoin="round"/>
+                                    <path d="M60 20L60 50L60 80" stroke="#ea580c" stroke-width="2.5" stroke-linejoin="round"/>
+                                    <path d="M35 35L60 50L85 35" stroke="#ea580c" stroke-width="1.5" stroke-linejoin="round"/>
+                                    <path d="M85 65L105 75" stroke="#ea580c" stroke-width="2"/>
+                                    <text x="106" y="82" fill="#ea580c" class="text-[12px] font-black font-mono">OH</text>
+                                    <path d="M60 20L60 5" stroke="#ea580c" stroke-width="1.5"/>
+                                    <text x="56" y="5" fill="#ea580c" class="text-[10px] font-mono font-black">CH₃</text>
+                                </svg>
+                            </div>
+                            <p class="text-[10px] text-brand-800 leading-normal italic text-center font-black">
+                                L-Borneol menghambat transmisi mediator nyeri sitokin dan melindungi epitel mukosa dari gesekan mekanis saliva.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Daun Sirih Card -->
+                    <div class="glass-card rounded-3xl p-6 sm:p-8 border-2 border-brand-200 bg-gradient-to-br from-white to-brand-50/40 shadow-xl space-y-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-20 h-20 bg-amber-50 rounded-2xl flex items-center justify-center border-2 border-brand-200 shrink-0">
+                                <svg class="w-16 h-16 text-emerald-600" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M50 15C50 15 15 35 15 60C15 80 30 85 50 85C70 85 85 80 85 60C85 35 50 15 50 15Z" fill="#10b981" fill-opacity="0.2" stroke="#047857" stroke-width="2.5" stroke-linejoin="round"/>
+                                    <path d="M50 15C50 15 32 40 32 62C32 75 42 84 50 85C58 84 68 75 68 62C68 40 50 15 50 15Z" stroke="#047857" stroke-width="1" stroke-dasharray="2 2"/>
+                                    <path d="M50 15V85" stroke="#064e3b" stroke-width="2"/>
+                                    <path d="M50 35Q65 42 76 56M50 50Q72 56 78 72" stroke="#047857" stroke-width="1.5"/>
+                                    <path d="M50 35Q35 42 24 56M50 50Q28 56 22 72" stroke="#047857" stroke-width="1.5"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-black text-slate-950 uppercase">Daun Sirih</h3>
+                                <p class="text-xs text-brand-700 italic font-black">Piper betle</p>
+                                <span class="inline-block mt-1 text-[10px] bg-brand-100 text-brand-900 font-black px-2 py-0.5 rounded">Fungisida & Antiseptik Kuat</span>
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-slate-950 font-bold leading-relaxed">
+                            Daun Sirih memproduksi zat aktif fenolik esensial **Kavibetol** (Chavibetol) dan Alilpirokatekol yang mampu melubangi dan merusak integritas membran fosfolipid sel jamur *Candida albicans*, mematikan perkembangbiakan hifa secara total tanpa memicu resistensi jamur.
+                        </p>
+
+                        <!-- Chemical Structure SVG Kavibetol -->
+                        <div class="bg-white rounded-2xl p-4 border-2 border-brand-100 space-y-2">
+                            <span class="text-[9px] font-black uppercase text-brand-700 tracking-wider block">Struktur Senyawa: Kavibetol (Allylpyrocatechol Derivative)</span>
+                            <div class="h-28 flex items-center justify-center">
+                                <svg class="w-48 h-24 text-slate-800" viewBox="0 0 200 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M60 20L85 35V65L60 80L35 65V35L60 20Z" stroke="#ca8a04" stroke-width="2.5" stroke-linejoin="round"/>
+                                    <path d="M55 28L75 40M75 60L55 72M43 38V62" stroke="#ca8a04" stroke-width="1.5"/>
+                                    <path d="M85 35L105 25" stroke="#ca8a04" stroke-width="2"/>
+                                    <text x="108" y="28" fill="#ca8a04" class="text-[11px] font-black font-mono">OH</text>
+                                    <path d="M85 65L105 75" stroke="#ca8a04" stroke-width="2"/>
+                                    <text x="108" y="78" fill="#ca8a04" class="text-[11px] font-black font-mono">OCH₃</text>
+                                    <path d="M35 50L15 50L5 65" stroke="#ca8a04" stroke-width="2" stroke-linejoin="round"/>
+                                    <path d="M15 53L5 68" stroke="#ca8a04" stroke-width="1"/>
+                                    <text x="1" y="80" fill="#ca8a04" class="text-[9px] font-mono font-black">CH=CH₂</text>
+                                </svg>
+                            </div>
+                            <p class="text-[10px] text-brand-800 leading-normal italic text-center font-black">
+                                Alilpirokatekol merusak biosintesis ergosterol, merusak membran dinding sel *C. albicans*.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature 1: AI Oral Thrush Risk Screening -->
+        <section id="skrining" class="py-16 bg-white border-t-2 border-brand-100">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <span class="bg-brand-100 border-2 border-brand-200 text-brand-700 text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider">
+                        Fitur 1 • AI Adaptive Assessment
+                    </span>
+                    <h2 class="text-3xl font-black text-brand-950 mt-4 uppercase">AI Oral Thrush Risk Screening</h2>
+                    <p class="text-slate-950 mt-2 text-xs sm:text-sm font-bold">
+                        Algoritma adaptif memproyeksikan kecenderungan infeksi Candida albicans pada mukosa mulut berdasarkan riwayat fisiologis, pola gaya hidup, dan detail penggunaan inhaler kortikosteroid Anda.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    <!-- Input Form Screening -->
+                    <div class="lg:col-span-7 glass-card rounded-2xl p-6 sm:p-8 border-2 border-brand-200 shadow-xl bg-white space-y-6">
+                        <h3 class="text-base font-black text-slate-950 flex items-center gap-2">
+                            <i data-lucide="check-square" class="text-brand-600 w-5 h-5"></i>
+                            Kuesioner Variabel Klinis Komprehensif (10 Parameter)
+                        </h3>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">1. Frekuensi Inhalasi (per Hari)</label>
+                                <input type="number" id="scr-inhale-freq" required min="0" max="10" placeholder="Contoh: 2" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-4 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">2. Kebiasaan Berkumur Setelah Inhalasi</label>
+                                <select id="scr-gargle-habit" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-4 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                                    <option value="selalu">Selalu Berkumur Dengan Air Bersih</option>
+                                    <option value="jarang">Jarang Berkumur</option>
+                                    <option value="tidak_pernah">Tidak Pernah Berkumur</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">3. Durasi Penggunaan Inhaler Steroid</label>
+                                <select id="scr-inhale-duration" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-4 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                                    <option value="baru">Baru Menggunakan (&lt; 1 Bulan)</option>
+                                    <option value="sedang">Sedang (1 - 6 Bulan)</option>
+                                    <option value="lama">Lama (&gt; 6 Bulan)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">4. Keterpeliharaan Higienitas Rongga Mulut</label>
+                                <select id="scr-oral-hygiene" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-4 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                                    <option value="baik">Sangat Baik (Sikat gigi + bersihkan lidah rutin)</option>
+                                    <option value="kurang">Kurang Terawat / Sering Terlewat</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">5. Estimasi Dosis Steroid Inhaler</label>
+                                <select id="scr-steroid-dosage" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-4 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                                    <option value="rendah">Rendah (&lt; 250 mcg per hari)</option>
+                                    <option value="sedang">Sedang (250 - 500 mcg per hari)</option>
+                                    <option value="tinggi">Tinggi (&gt; 500 mcg per hari)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">6. Riwayat Terapi Antibiotik Terakhir</label>
+                                <select id="scr-antibiotic-history" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-4 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                                    <option value="tidak">Tidak Mengonsumsi Antibiotik 1 Bulan Terakhir</option>
+                                    <option value="ada">Ada (Antibiotik spektrum luas, memicu disbiosis mulut)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">7. Kebiasaan Bernapas Lewat Mulut (Mouth Breathing)</label>
+                                <select id="scr-mouth-breathing" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-4 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                                    <option value="tidak">Tidak (Bernapas lewat hidung secara normal)</option>
+                                    <option value="ya">Ya (Mulut sering terasa kering/xerostomia)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">8. Penggunaan Gigi Tiruan / Behel Gigi</label>
+                                <select id="scr-denture-user" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-4 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                                    <option value="tidak">Tidak Menggunakan Alat Bantu</option>
+                                    <option value="ya">Ya (Berpotensi menjadi reservoir sarang biofilm Candida)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">9. Tingkat Hidrasi Harian (Asupan Air Putih)</label>
+                                <select id="scr-hydration" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-4 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                                    <option value="cukup">Cukup (>= 2 Liter / 8 Gelas sehari)</option>
+                                    <option value="kurang">Kurang (Saliva kental / xerostomia ringan)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">10. Konsumsi Gula & Makanan Manis</label>
+                                <select id="scr-sugar-intake" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-4 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                                    <option value="normal">Normal / Rendah Gula</option>
+                                    <option value="tinggi">Tinggi (Glukosa mempercepat transisi ragi ke hifa Candida)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button onclick="calculateAIThrushRisk()" class="w-full bg-gradient-to-r from-brand-600 to-phyto-500 hover:from-brand-700 hover:to-phyto-600 text-white font-black uppercase text-xs tracking-wider py-3.5 rounded-xl transition-all shadow-md">
+                            Kalkulasi Tingkat Risiko Candidiasis Komprehensif
+                        </button>
+                    </div>
+
+                    <!-- Output Panel Screening & Dynamic Preventive Protocols -->
+                    <div class="lg:col-span-5 space-y-6">
+                        <div class="glass-card rounded-2xl p-6 border-2 border-brand-200 text-center min-h-[280px] flex flex-col justify-center items-center bg-white shadow-md" id="thrush-risk-placeholder">
+                            <i data-lucide="shield-alert" class="w-16 h-16 text-brand-600 mb-4 animate-bounce"></i>
+                            <h3 class="text-lg font-black text-slate-950 uppercase">Menunggu Kalkulasi</h3>
+                            <p class="text-slate-950 font-bold text-xs mt-2 max-w-xs leading-relaxed">
+                                Isi data klinis and frekuensi penggunaan inhaler steroid di sebelah kiri untuk menghasilkan skor risiko patofisiologi oral thrush Anda.
+                            </p>
+                        </div>
+
+                        <div class="hidden glass-card rounded-2xl p-6 border-2 border-brand-200 space-y-4 bg-white shadow-md" id="thrush-risk-result">
+                            <div class="flex items-center space-x-3 pb-3 border-b-2 border-brand-100">
+                                <div class="bg-brand-500 text-white p-2 rounded-xl">
+                                    <i data-lucide="activity" class="w-5 h-5"></i>
+                                </div>
+                                <h3 class="font-black text-sm text-slate-950 uppercase">Analisis Risiko Candidiasis Oral</h3>
+                            </div>
+
+                            <div class="text-center space-y-1">
+                                <span class="text-[9px] font-black uppercase tracking-widest text-brand-600">Skor Kerentanan Mukosa</span>
+                                <div class="text-3xl font-black text-slate-950" id="risk-score-value">0%</div>
+                                <span id="risk-level-badge" class="text-[9px] font-black px-2 py-0.5 rounded-full text-white bg-brand-500 uppercase">Rendah</span>
+                            </div>
+
+                            <p class="text-xs text-slate-950 font-bold leading-relaxed" id="risk-desc-text">
+                                Profil risiko Anda dipengaruhi secara signifikan oleh frekuensi inhalasi dan efisiensi berkumur setelah terapi steroid.
+                            </p>
+
+                            <!-- Dynamic Preventive Panel -->
+                            <div id="scr-preventive-panel" class="border-t-2 border-dashed border-brand-200 pt-4 space-y-3">
+                                <!-- Populated dynamically by javascript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature 2: Dynamic pH Indicator Technology -->
+        <section id="indicator" class="py-16 bg-brand-50/20 border-t-2 border-brand-100">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <span class="bg-brand-100 border-2 border-brand-200 text-brand-700 text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider">
+                        Fitur 2 • pH Chromic Formulation
+                    </span>
+                    <h2 class="text-3xl font-black text-brand-950 mt-4 uppercase">Dynamic pH Indicator Technology</h2>
+                    <p class="text-slate-950 mt-2 text-xs sm:text-sm font-bold">
+                        Inovasi sediaan *mouthwash* yang sensitif terhadap perubahan pH air liur Anda. Warna limbah kumur dapat berubah sebagai pengingat tingkat keasaman yang mendukung perkembangbiakan jamur Candida.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <!-- Interactive pH simulator slider & Animation trigger -->
+                    <div class="glass-card rounded-2xl p-6 sm:p-8 border-2 border-brand-200 bg-white shadow-xl space-y-6">
+                        <h3 class="font-black text-sm text-slate-950 uppercase flex items-center gap-2">
+                            <i data-lucide="sliders" class="text-brand-600"></i>
+                            Simulasi pH Air Liur (Saliva)
+                        </h3>
+                        <p class="text-xs text-slate-950 font-bold leading-relaxed">
+                            Geser nilai pH di bawah ini untuk melihat indikator warna alami yang diproyeksikan oleh klorofil alami daun sembung dan sirih di dalam mulut Anda, lalu tekan jalankan simulasi penetesan.
+                        </p>
+                        
+                        <div class="space-y-4 pt-2">
+                            <div class="flex justify-between text-xs font-black text-slate-950">
+                                <span class="text-brand-700">Asam (Bahaya Candida)</span>
+                                <span class="text-brand-600">Alkali (Aman)</span>
+                            </div>
+                            <input type="range" id="ph-slider" min="4.5" max="8.0" step="0.5" value="7.0" oninput="updatePHSimulationValue(this.value)" class="w-full accent-brand-500 bg-brand-100 rounded-lg h-2 cursor-pointer">
+                            <div class="text-center text-lg font-black text-slate-950 pt-2">
+                                Target Evaluasi pH: <span id="ph-display-val" class="text-brand-600 font-black">7.0</span>
+                            </div>
+                            
+                            <!-- Action button to trigger drip animation -->
+                            <button onclick="triggerPHChemicalAnimation()" class="w-full bg-slate-950 hover:bg-slate-900 text-white font-black text-xs uppercase py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5">
+                                <i data-lucide="flask-conical" class="w-4 h-4"></i> Jalankan Simulasi Reaksi Kimia
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Visual Beaker Output with Interactive Droplet Dropper -->
+                    <div class="glass-card rounded-2xl p-6 border-2 border-brand-200 bg-white shadow-xl flex flex-col items-center justify-center text-center space-y-4 relative overflow-hidden">
+                        <span class="text-[9px] font-black uppercase tracking-widest text-brand-700">Proyeksi Warna Sediaan (Uji Saliva)</span>
+                        
+                        <!-- Reaction animation arena -->
+                        <div class="relative w-40 h-56 flex flex-col items-center justify-end pb-4">
+                            <!-- Dropper / Pipette SVG -->
+                            <div id="pipette-dropper" class="absolute top-0 w-8 h-20 transition-all duration-300">
+                                <svg class="w-full h-full text-slate-800" viewBox="0 0 30 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10 5H20V15H10V5Z" fill="#ea580c"/>
+                                    <path d="M12 15H18V60L15 75L12 60V15Z" fill="#94a3b8" stroke="#ea580c" stroke-width="1.5"/>
+                                    <rect x="13" y="20" width="4" height="25" fill="#f8fafc" opacity="0.6"/>
+                                </svg>
+                                <!-- Droplet particle -->
+                                <div id="saliva-droplet" class="absolute left-1/2 -translate-x-1/2 top-[72px] w-2.5 h-3.5 bg-brand-500 rounded-b-full rounded-t-lg hidden transition-all"></div>
+                            </div>
+
+                            <!-- Beaker Glass Container -->
+                            <div class="w-32 h-32 rounded-b-3xl rounded-t-lg border-4 border-slate-300 bg-white/40 relative flex items-end justify-center overflow-hidden shadow-inner">
+                                <!-- Liquid content filled to 60% -->
+                                <div id="ph-liquid-beaker" class="w-full h-[65%] bg-emerald-500 transition-all duration-1000 ease-in-out relative">
+                                    <!-- Ripple wave overlay -->
+                                    <div id="ph-beaker-ripple" class="absolute -top-1 left-0 right-0 h-2 bg-white/20 rounded-full animate-ping hidden"></div>
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <i data-lucide="droplet" class="w-8 h-8 text-white/50 animate-bounce"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="font-black text-xs uppercase" id="ph-status-title">Status: Aman (Aman dari Candida)</h4>
+                            <p class="text-[10px] text-slate-950 font-bold max-w-xs mt-1" id="ph-status-desc">
+                                pH liur seimbang (6.5 - 7.5) menghambat proses proliferasi jamur Candida albicans secara optimal.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature 3: Oral Thrush Self-Assessment -->
+        <section id="assessment" class="py-16 bg-white border-t-2 border-brand-100">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6">
+                <div class="text-center mb-12">
+                    <span class="bg-brand-100 border-2 border-brand-200 text-brand-700 text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider">
+                        Fitur 3 • Daily Symptom Tracker
+                    </span>
+                    <h2 class="text-3xl font-black text-brand-950 mt-4 uppercase">Oral Thrush Self-Assessment</h2>
+                    <p class="text-slate-950 mt-2 text-xs sm:text-sm font-bold">
+                        Lakukan penapisan mandiri harian berbasis keluhan sensoris klinis terperinci untuk mengidentifikasi tingkat kerentanan kandidiasis rongga mulut akibat steroid hirup.
+                    </p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-6 sm:p-10 border-2 border-brand-200 bg-white shadow-xl space-y-6">
+                    <form id="self-assess-form" onsubmit="calculateSelfAssessment(event)" class="space-y-4">
+                        
+                        <!-- 10 Questions Array for Deep Diagnostics -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Q1 -->
+                            <div class="p-3 rounded-xl bg-brand-50 border-2 border-brand-200 space-y-2">
+                                <h4 class="font-black text-xs text-brand-950 uppercase">1. Lapisan Lidah Putih (Plak)</h4>
+                                <p class="text-[10px] text-slate-950 font-bold">Apakah terdapat plak putih tebal seperti sisa susu di permukaan lidah?</p>
+                                <select id="assess-q1" class="w-full bg-white border-2 border-brand-200 rounded-lg p-1.5 text-xs outline-none font-bold">
+                                    <option value="0">Tidak Ada</option>
+                                    <option value="10">Plak Tipis Terbatas</option>
+                                    <option value="20">Plak Tebal Menyebar</option>
+                                </select>
+                            </div>
+                            <!-- Q2 -->
+                            <div class="p-3 rounded-xl bg-brand-50 border-2 border-brand-200 space-y-2">
+                                <h4 class="font-black text-xs text-brand-950 uppercase">2. Nyeri / Sensitifitas Rongga Mulut</h4>
+                                <p class="text-[10px] text-slate-950 font-bold">Rasa nyeri atau tidak nyaman pada mukosa pipi bagian dalam?</p>
+                                <select id="assess-q2" class="w-full bg-white border-2 border-brand-200 rounded-lg p-1.5 text-xs outline-none font-bold">
+                                    <option value="0">Tidak Ada</option>
+                                    <option value="5">Nyeri Ringan saat Mengunyah</option>
+                                    <option value="15">Nyeri Konstan Sangat Mengganggu</option>
+                                </select>
+                            </div>
+                            <!-- Q3 -->
+                            <div class="p-3 rounded-xl bg-brand-50 border-2 border-brand-200 space-y-2">
+                                <h4 class="font-black text-xs text-brand-950 uppercase">3. Sensasi Terbakar (Burning Sensation)</h4>
+                                <p class="text-[10px] text-slate-950 font-bold">Sensasi perih panas seperti terbakar di mulut saat makan hangat/pedas?</p>
+                                <select id="assess-q3" class="w-full bg-white border-2 border-brand-200 rounded-lg p-1.5 text-xs outline-none font-bold">
+                                    <option value="0">Tidak Ada</option>
+                                    <option value="5">Ringan / Sesekali</option>
+                                    <option value="10">Sangat Perih & Sering</option>
+                                </select>
+                            </div>
+                            <!-- Q4 -->
+                            <div class="p-3 rounded-xl bg-brand-50 border-2 border-brand-200 space-y-2">
+                                <h4 class="font-black text-xs text-brand-950 uppercase">4. Kesulitan Menelan (Disfagia)</h4>
+                                <p class="text-[10px] text-slate-950 font-bold">Rasa sakit atau terhambat di tenggorokan saat menelan?</p>
+                                <select id="assess-q4" class="w-full bg-white border-2 border-brand-200 rounded-lg p-1.5 text-xs outline-none font-bold">
+                                    <option value="0">Lancar Menelan</option>
+                                    <option value="10">Terganjal Ringan</option>
+                                    <option value="20">Sangat Sakit saat Menelan</option>
+                                </select>
+                            </div>
+                            <!-- Q5 -->
+                            <div class="p-3 rounded-xl bg-brand-50 border-2 border-brand-200 space-y-2">
+                                <h4 class="font-black text-xs text-brand-950 uppercase">5. Hilangnya Nafsu Makan</h4>
+                                <p class="text-[10px] text-slate-950 font-bold">Nafsu makan menurun akibat rasa mulut pahit/tidak nyaman?</p>
+                                <select id="assess-q5" class="w-full bg-white border-2 border-brand-200 rounded-lg p-1.5 text-xs outline-none font-bold">
+                                    <option value="0">Normal</option>
+                                    <option value="5">Menurun Sedikit</option>
+                                    <option value="10">Hilang Nafsu Makan Total</option>
+                                </select>
+                            </div>
+                            <!-- Q6 -->
+                            <div class="p-3 rounded-xl bg-brand-50 border-2 border-brand-200 space-y-2">
+                                <h4 class="font-black text-xs text-brand-950 uppercase">6. Mulut Kering / Xerostomia</h4>
+                                <p class="text-[10px] text-slate-950 font-bold">Kelangkaan sekresi saliva (air ludah) sehingga mulut terasa kering?</p>
+                                <select id="assess-q6" class="w-full bg-white border-2 border-brand-200 rounded-lg p-1.5 text-xs outline-none font-bold">
+                                    <option value="0">Normal / Basah</option>
+                                    <option value="5">Kering Ringan</option>
+                                    <option value="10">Kering Ekstrem / Lengket</option>
+                                </select>
+                            </div>
+                            <!-- Q7 -->
+                            <div class="p-3 rounded-xl bg-brand-50 border-2 border-brand-200 space-y-2">
+                                <h4 class="font-black text-xs text-brand-950 uppercase">7. Perubahan Indera Perasa (Dysgeusia)</h4>
+                                <p class="text-[10px] text-slate-950 font-bold">Kehilangan kemampuan mendeteksi rasa manis, asin, atau pahit?</p>
+                                <select id="assess-q7" class="w-full bg-white border-2 border-brand-200 rounded-lg p-1.5 text-xs outline-none font-bold">
+                                    <option value="0">Normal</option>
+                                    <option value="5">Makanan Terasa Hambar</option>
+                                    <option value="10">Rasa Logam / Hilang Rasa Total</option>
+                                </select>
+                            </div>
+                            <!-- Q8 -->
+                            <div class="p-3 rounded-xl bg-brand-50 border-2 border-brand-200 space-y-2">
+                                <h4 class="font-black text-xs text-brand-950 uppercase">8. Sudut Mulut Pecah (Cheilitis)</h4>
+                                <p class="text-[10px] text-slate-950 font-bold">Apakah terdapat retakan kemerahan atau luka perih di sudut bibir?</p>
+                                <select id="assess-q8" class="w-full bg-white border-2 border-brand-200 rounded-lg p-1.5 text-xs outline-none font-bold">
+                                    <option value="0">Tidak Ada</option>
+                                    <option value="5">Pecah-pecah Ringan</option>
+                                    <option value="10">Luka Perih Berdarah</option>
+                                </select>
+                            </div>
+                            <!-- Q9 -->
+                            <div class="p-3 rounded-xl bg-brand-50 border-2 border-brand-200 space-y-2">
+                                <h4 class="font-black text-xs text-brand-950 uppercase">9. Pendarahan Mikro</h4>
+                                <p class="text-[10px] text-slate-950 font-bold">Apakah keluar darah tipis saat lidah tersikat atau tergesek?</p>
+                                <select id="assess-q9" class="w-full bg-white border-2 border-brand-200 rounded-lg p-1.5 text-xs outline-none font-bold">
+                                    <option value="0">Tidak Ada</option>
+                                    <option value="10">Terjadi Pendarahan Ringan</option>
+                                </select>
+                            </div>
+                            <!-- Q10 -->
+                            <div class="p-3 rounded-xl bg-brand-50 border-2 border-brand-200 space-y-2">
+                                <h4 class="font-black text-xs text-brand-950 uppercase">10. Perubahan Kualitas Suara</h4>
+                                <p class="text-[10px] text-slate-950 font-bold">Suara serak atau parau akibat perluasan spora jamur ke laring?</p>
+                                <select id="assess-q10" class="w-full bg-white border-2 border-brand-200 rounded-lg p-1.5 text-xs outline-none font-bold">
+                                    <option value="0">Normal</option>
+                                    <option value="10">Serak / Sedikit Hilang Suara</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-black uppercase text-xs tracking-wider py-3.5 rounded-xl transition-all shadow-md">
+                            Proyeksikan Skor Gejala Harian (10 Parameter)
+                        </button>
+                    </form>
+
+                    <!-- Self-Assess Results -->
+                    <div id="self-assess-result-panel" class="hidden bg-brand-50 p-4 rounded-2xl border-2 border-brand-200 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-black text-slate-950 uppercase">Indeks Keparahan Gejala Oral:</span>
+                            <span id="self-assess-score-badge" class="bg-brand-500 text-white font-black text-[10px] px-2 py-0.5 rounded-full">Normal</span>
+                        </div>
+                        <p class="text-xs text-slate-950 font-black leading-normal" id="self-assess-feedback-text">
+                            Skor akumulatif Anda terdeteksi dalam batas wajar. Tetap jaga kebersihan mulut setelah pemakaian inhaler.
+                        </p>
+
+                        <!-- Dynamic Preventive Panel -->
+                        <div id="assess-preventive-panel" class="border-t-2 border-dashed border-brand-200 pt-3 space-y-3">
+                            <!-- Populated dynamically by javascript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature 4: Smart Oral Photo Screening -->
+        <section id="photo-scan" class="py-16 bg-brand-50/20 border-t-2 border-brand-100">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <span class="bg-brand-100 border-2 border-brand-200 text-brand-700 text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider">
+                        Fitur 4 • AI Computer Vision Simulation
+                    </span>
+                    <h2 class="text-3xl font-black text-brand-950 mt-4 uppercase">Smart Oral Photo Screening</h2>
+                    <p class="text-slate-950 mt-2 text-xs sm:text-sm font-bold">
+                        Unggah foto rongga mulut atau lidah Anda untuk menguji deteksi otomatis plak keputihan kandidiasis dan tingkat keparahan inflamasi mukosa pipi.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    <!-- Image Selection / Upload Dropzone -->
+                    <div class="lg:col-span-7 glass-card rounded-2xl p-6 sm:p-8 border-2 border-brand-200 bg-white shadow-xl space-y-6">
+                        <h3 class="font-black text-sm text-slate-950 uppercase">Pilih Gambar atau Ambil Foto</h3>
+                        <p class="text-xs text-brand-700 font-bold leading-relaxed">
+                            Pilih sampel citra klinis di bawah ini atau unggah berkas foto rongga mulut Anda sendiri untuk memulai pemindaian kecerdasan buatan.
+                        </p>
+
+                        <!-- Sample presets for high utility -->
+                        <div class="grid grid-cols-3 gap-2.5">
+                            <button onclick="selectPhotoSample('sehat')" class="p-2 border-2 border-brand-200 hover:border-phyto-500 rounded-xl bg-brand-50 text-[10px] font-black uppercase text-brand-900 transition-all">
+                                🟢 Lidah Normal
+                            </button>
+                            <button onclick="selectPhotoSample('thrush')" class="p-2 border-2 border-brand-200 hover:border-danger-500 rounded-xl bg-brand-50 text-[10px] font-black uppercase text-brand-900 transition-all">
+                                🔴 Candidiasis Akut
+                            </button>
+                            <button onclick="selectPhotoSample('radang')" class="p-2 border-2 border-brand-200 hover:border-warning-500 rounded-xl bg-brand-50 text-[10px] font-black uppercase text-brand-900 transition-all">
+                                🟡 Inflamasi Ringan
+                            </button>
+                        </div>
+
+                        <!-- Real File Input Dropzone -->
+                        <div class="border-2 border-dashed border-brand-300 rounded-2xl p-6 text-center hover:border-brand-500 transition-all cursor-pointer relative" id="photo-dropzone">
+                            <input type="file" id="real-photo-input" onchange="handlePhotoUpload(event)" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full">
+                            <i data-lucide="image" class="w-10 h-10 text-brand-600 mx-auto mb-2"></i>
+                            <span class="text-xs font-black text-slate-950 block">Tarik & Letakkan atau Unggah Gambar Lidah</span>
+                            <span class="text-[10px] text-brand-600 block mt-1">Mendukung format PNG, JPG (Maks. 5MB)</span>
+                        </div>
+
+                        <button id="start-scan-btn" onclick="executePhotoAIScan()" class="w-full bg-gradient-to-r from-brand-600 to-phyto-500 hover:from-brand-700 hover:to-phyto-600 text-white font-black uppercase text-xs tracking-wider py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5">
+                            <i data-lucide="scan" class="w-4 h-4"></i>
+                            Jalankan Pemindaian AI Vision
+                        </button>
+                    </div>
+
+                    <!-- Scan Visual Display Output -->
+                    <div class="lg:col-span-5">
+                        <div class="glass-card rounded-2xl p-6 border-2 border-brand-200 bg-white shadow-xl relative min-h-[380px] flex flex-col justify-center items-center overflow-hidden" id="photo-display-container">
+                            
+                            <!-- Scanner Animation Overlay -->
+                            <div id="scan-laser-line" class="hidden absolute left-0 right-0 h-1 bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.8)] z-20 scanner-line"></div>
+                            
+                            <div id="photo-scan-placeholder" class="text-center space-y-2">
+                                <i data-lucide="camera-off" class="w-12 h-12 text-brand-500 mx-auto"></i>
+                                <h4 class="font-black text-xs text-slate-950 uppercase">Citra Belum Dipilih</h4>
+                                <p class="text-[10px] text-brand-800 font-bold max-w-xs leading-normal">
+                                    Unggah foto atau pilih salah satu sampel lidah di sebelah kiri untuk menampilkan visualisasi diagnosis visual AI.
+                                </p>
+                            </div>
+
+                            <div id="photo-scan-output-box" class="hidden w-full space-y-4">
+                                <div class="w-full h-48 bg-brand-50 rounded-xl overflow-hidden border-2 border-brand-200 relative">
+                                    <img id="photo-scan-img" src="" alt="Citra Mulut" class="w-full h-full object-cover">
+                                    <div class="absolute bottom-2 left-2 bg-black/60 px-2 py-0.5 rounded text-[8px] text-white uppercase font-mono">
+                                        Analisis Citra Aktif
+                                    </div>
+                                </div>
+
+                                <div class="space-y-2 text-xs">
+                                    <div class="flex justify-between border-b border-brand-100 pb-1">
+                                        <span class="text-brand-700 font-black">Plak Putih (Kandidiasis)</span>
+                                        <strong id="photo-res-plaque" class="text-danger-500 font-black">Terdeteksi (74%)</strong>
+                                    </div>
+                                    <div class="flex justify-between border-b border-brand-100 pb-1">
+                                        <span class="text-brand-700 font-black">Derajat Inflamasi Mukosa</span>
+                                        <strong id="photo-res-inflam" class="text-warning-500 font-black">Tinggi (85%)</strong>
+                                    </div>
+                                    <div class="bg-brand-50 p-2.5 rounded-xl border-2 border-brand-200 text-[10px] leading-normal text-brand-900 font-bold">
+                                        💡 <strong>Rekomendasi AI:</strong> Segera kumur dengan phytomouthwash Mucoshield-TB 3x sehari guna menetralkan keasaman lidah dan membunuh spora jamur.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature 5: TB Care Reminder & Alarm System -->
+        <section id="reminders" class="py-16 bg-white border-t-2 border-brand-100">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6">
+                <div class="text-center mb-12">
+                    <span class="bg-brand-100 border-2 border-brand-200 text-brand-700 text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider">
+                        Fitur 5 • Medication & Inhalation Reminders
+                    </span>
+                    <h2 class="text-3xl font-black text-brand-950 mt-4 uppercase">TB Care Reminder & Alarm Warning</h2>
+                    <p class="text-slate-950 mt-2 text-xs sm:text-sm font-bold">
+                        Atur pengingat rutin, jalankan simulasi peringatan alarm darurat dan tandai daftar kepatuhan harian konsumsi OAT serta berkumur dengan *phytomouthwash*.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                    <!-- Alarm Controller Box -->
+                    <div class="md:col-span-4 glass-card rounded-2xl p-6 border-2 border-brand-200 bg-white shadow-md text-center space-y-4">
+                        <div class="w-12 h-12 bg-brand-500/10 text-brand-600 rounded-full flex items-center justify-center mx-auto shadow-sm">
+                            <i data-lucide="alarm-clock" class="w-6 h-6 animate-swing"></i>
+                        </div>
+                        <h4 class="font-black text-sm text-slate-950 uppercase">Alarm Warning Center</h4>
+                        
+                        <div class="bg-brand-50 p-3 rounded-xl border-2 border-brand-200 space-y-2">
+                            <div class="text-[10px] font-black uppercase text-brand-800">Status Pengingat:</div>
+                            <span id="alarm-status-indicator" class="text-xs font-black text-brand-600 flex items-center justify-center gap-1">
+                                <span class="w-2.5 h-2.5 bg-brand-500 rounded-full animate-ping"></span> AKTIF (19:00 WIB)
+                            </span>
+                        </div>
+
+                        <!-- Alarm Simulation Trigger -->
+                        <button onclick="triggerWarningAlarm()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-black text-[10px] uppercase py-2.5 rounded-xl transition-all shadow flex items-center justify-center gap-1.5">
+                            <i data-lucide="volume-2" class="w-4 h-4"></i> Simulasikan Warning Alarm (Audio)
+                        </button>
+                    </div>
+
+                    <!-- Checklist Box -->
+                    <div class="md:col-span-8 glass-card rounded-2xl p-6 border-2 border-brand-200 bg-white shadow-xl space-y-6">
+                        <div class="flex items-center justify-between pb-3 border-b-2 border-brand-100">
+                            <h3 class="font-black text-slate-950 text-sm uppercase flex items-center gap-1.5">
+                                <i data-lucide="check-square" class="text-brand-500"></i>
+                                Papan Kepatuhan Hari Ini
+                            </h3>
+                            <span class="text-[9px] bg-brand-100 text-brand-800 border-2 border-brand-200 px-2.5 py-0.5 rounded-full font-black">Klinis Terkontrol</span>
+                        </div>
+
+                        <div class="space-y-3" id="reminders-checklist-container">
+                            <label class="flex items-center p-3 rounded-xl bg-brand-50 border-2 border-brand-200 hover:border-brand-300 transition-all cursor-pointer">
+                                <input type="checkbox" id="check-oat" onchange="updateAdherenceScore()" class="w-4 h-4 rounded text-brand-600 bg-white border-brand-400 focus:ring-brand-500">
+                                <div class="ml-3 text-xs text-slate-950 font-bold">
+                                    <strong>Minum OAT (Obat Anti Tuberkulosis)</strong> - Konsumsi rutin pagi/malam sesuai petunjuk
+                                </div>
+                            </label>
+                            <label class="flex items-center p-3 rounded-xl bg-brand-50 border-2 border-brand-200 hover:border-brand-300 transition-all cursor-pointer">
+                                <input type="checkbox" id="check-inhaler" onchange="updateAdherenceScore()" class="w-4 h-4 rounded text-brand-600 bg-white border-brand-400 focus:ring-brand-500">
+                                <div class="ml-3 text-xs text-slate-950 font-bold">
+                                    <strong>Penggunaan Inhaler Terapi</strong> - Hirup obat steroid sesuai petunjuk dokter paru
+                                </div>
+                            </label>
+                            <label class="flex items-center p-3 rounded-xl bg-brand-50 border-2 border-brand-200 hover:border-brand-300 transition-all cursor-pointer">
+                                <input type="checkbox" id="check-gargle" onchange="updateAdherenceScore()" class="w-4 h-4 rounded text-brand-600 bg-white border-brand-400 focus:ring-brand-500">
+                                <div class="ml-3 text-xs text-slate-950 font-bold">
+                                    <strong>Berkumur Dengan Mucoshield-TB</strong> - Bersihkan sisa deposit steroid pasca inhalasi
+                                </div>
+                            </label>
+                            <label class="flex items-center p-3 rounded-xl bg-brand-50 border-2 border-brand-200 hover:border-brand-300 transition-all cursor-pointer">
+                                <input type="checkbox" id="check-monitor" onchange="updateAdherenceScore()" class="w-4 h-4 rounded text-brand-600 bg-white border-brand-400 focus:ring-brand-500">
+                                <div class="ml-3 text-xs text-slate-950 font-bold">
+                                    <strong>Pengisian Monitoring Harian</strong> - Dokumentasikan keluhan sariawan/lidah putih Anda
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Warning Alarm Modal Popup with Audio Beep -->
+        <div id="warning-alarm-modal" class="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-brand-950/70 backdrop-blur-sm hidden">
+            <div class="bg-white border-4 border-brand-500 rounded-3xl max-w-md w-full p-6 text-center space-y-6 shadow-2xl relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-b from-brand-100/30 to-transparent"></div>
+                <div class="relative z-10 space-y-4">
+                    <div class="w-20 h-20 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center mx-auto shadow-inner border-2 border-brand-200">
+                        <i data-lucide="bell" class="w-10 h-10 animate-ping"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-brand-950 uppercase">🚨 PERINGATAN ALARM AKTIF!</h3>
+                    <p class="text-sm text-slate-950 font-black leading-relaxed">
+                        Saatnya berkumur dengan sediaan *MUCOSHIELD-TB Phytomouthwash*! Sisa zat kimia steroid sisa hirup yang menumpuk di lidah harus dibilas secepatnya guna mengeliminasi kolonisasi spora jamur Candida.
+                    </p>
+                    <div class="p-3 bg-brand-50 rounded-xl border-2 border-brand-200 text-xs text-brand-900 font-bold">
+                        💡 <strong>Langkah Sehat:</strong> Kumur 30-60 detik pasca menghirup obat, lalu bilas sisa cairan.
+                    </div>
+                    <button onclick="dismissWarningAlarm()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-black uppercase text-xs tracking-widest py-3 rounded-xl shadow-md">
+                        Saya Mengerti & Telah Kumur
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature 6: Adherence Score Dashboard -->
+        <section id="adherence" class="py-16 bg-brand-50/20 border-t-2 border-brand-100">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6">
+                <div class="text-center mb-12">
+                    <span class="bg-brand-100 border-2 border-brand-200 text-brand-700 text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider">
+                        Fitur 6 • Real-Time Tracking Score
+                    </span>
+                    <h2 class="text-3xl font-black text-brand-950 mt-4 uppercase">Adherence Score Dashboard</h2>
+                    <p class="text-slate-950 mt-2 text-xs sm:text-sm font-bold">
+                        Indeks kepatuhan terapi Anda dihitung secara dinamis dari aktivitas pencatatan harian, konsumsi obat, dan penggunaan *mouthwash*.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <!-- Circular Gauge -->
+                    <div class="glass-card rounded-2xl p-6 border-2 border-brand-200 bg-white text-center space-y-4 shadow-md">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-brand-700">Skor Kepatuhan Terapi Anda</span>
+                        <div class="relative w-36 h-36 mx-auto flex items-center justify-center">
+                            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="40" stroke="rgba(249, 115, 22, 0.1)" stroke-width="8" fill="transparent"/>
+                                <circle id="adherence-gauge-circle" cx="50" cy="50" r="40" stroke="#f97316" stroke-width="8" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="251.2"/>
+                            </svg>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                <span id="adherence-score-val" class="text-4xl font-black text-slate-950">0%</span>
+                                <span id="adherence-badge" class="text-[8px] font-black px-2 py-0.5 rounded-full text-white bg-brand-400 uppercase">Sangat Kurang</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Motivational Reminder -->
+                    <div class="glass-card rounded-2xl p-6 border-2 border-brand-200 bg-white shadow-md space-y-3">
+                        <h4 class="text-xs font-black text-brand-750 uppercase tracking-wider flex items-center gap-1.5">
+                            <i data-lucide="sparkles" class="w-4 h-4 text-brand-500"></i>
+                            Pesan Motivasi & Penguatan Diri
+                        </h4>
+                        <p class="text-xs text-slate-950 font-bold leading-relaxed" id="adherence-feedback-msg">
+                            Lengkapi seluruh aktivitas hari ini untuk mendorong grafik kepatuhan Anda menuju zona aman (minimum 80% untuk keberhasilan terapi TBC).
+                        </p>
+                        <div class="p-3 bg-brand-50 rounded-xl border-l-4 border-brand-500 text-[11px] text-brand-900 italic font-black">
+                            "Kunci utama kesembuhan tuberkulosis adalah disiplin tanpa jeda. Mari proteksi lidah Anda dari sariawan jamur dengan Mucoshield-TB."
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature 7: Nutritional Risk Screening -->
+        <section id="nutrisi" class="py-16 bg-white border-t-2 border-brand-100">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <span class="bg-brand-100 border-2 border-brand-200 text-brand-700 text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider">
+                        Fitur 7 • Malnutrition Screening Module
+                    </span>
+                    <h2 class="text-3xl font-black text-brand-950 mt-4 uppercase">Nutritional Risk Screening</h2>
+                    <p class="text-slate-950 mt-2 text-xs sm:text-sm font-bold">
+                        Sariawan parah (*oral thrush*) membuat menelan makanan terasa sangat sakit, memicu penurunan berat badan yang drastis pada pasien TBC.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    <!-- Nutritional Assessment Form -->
+                    <div class="lg:col-span-7 glass-card rounded-2xl p-6 sm:p-8 border-2 border-brand-200 bg-white shadow-xl space-y-6">
+                        <h3 class="font-black text-sm text-slate-950 uppercase flex items-center gap-1.5">
+                            <i data-lucide="utensils" class="text-brand-600"></i>
+                            Kuesioner Pemenuhan Nutrisi
+                        </h3>
+
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">Apakah ada penurunan berat badan dalam 1 bulan terakhir?</label>
+                                <select id="nut-wt-loss" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-4 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                                    <option value="tidak">Tidak Ada</option>
+                                    <option value="sedikit">Turun Ringan (1 - 3 kg)</option>
+                                    <option value="banyak">Turun Sangat Banyak (&gt; 3 kg)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">Kondisi Nafsu Makan</label>
+                                <select id="nut-appetite" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-4 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                                    <option value="baik">Sangat Baik / Nafsu Makan Terbuka</option>
+                                    <option value="menurun">Nafsu Makan Menurun Akibat Mulut Pahit/Sakit</option>
+                                    <option value="buruk">Hilang Nafsu Makan Total (Anoreksia Sekunder)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-black text-brand-800 uppercase tracking-wider mb-1">Frekuensi Konsumsi Makanan Sehari</label>
+                                <select id="nut-freq" class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-4 py-2.5 text-slate-950 text-xs font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                                    <option value="normal">3 Kali Sehari / Lebih</option>
+                                    <option value="kurang">Hanya 1 - 2 Kali Sehari</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button onclick="evaluateNutritionalRisk()" class="w-full bg-gradient-to-r from-brand-600 to-phyto-500 hover:from-brand-700 hover:to-phyto-600 text-white font-black uppercase text-xs tracking-wider py-3 rounded-xl transition-all shadow-md">
+                            Kalkulasi Risiko Malnutrisi
+                        </button>
+                    </div>
+
+                    <!-- Recommendation Display -->
+                    <div class="lg:col-span-5">
+                        <div id="nutrition-result-placeholder" class="glass-card rounded-2xl p-6 border-2 border-brand-200 bg-white text-center min-h-[300px] flex flex-col justify-center items-center shadow-md">
+                            <i data-lucide="info" class="w-12 h-12 text-brand-600 mb-2"></i>
+                            <h4 class="font-black text-xs text-slate-950 uppercase">Menunggu Analisis Nutrisi</h4>
+                            <p class="text-[10px] text-slate-950 font-bold max-w-xs leading-normal">
+                                Lengkapi pengisian kuesioner penurunan berat badan dan seleramu di sebelah kiri untuk merumuskan pedoman nutrisi khusus.
+                            </p>
+                        </div>
+
+                        <div id="nutrition-result-panel" class="hidden glass-card rounded-2xl p-6 border-2 border-brand-200 bg-white shadow-md space-y-4">
+                            <div class="pb-2 border-b-2 border-brand-100">
+                                <h4 class="font-black text-xs text-slate-950 uppercase flex items-center gap-1.5">
+                                    <i data-lucide="heart" class="text-brand-500"></i>
+                                    Rekomendasi Diet Nutrisi Pasien TB
+                                </h4>
+                            </div>
+                            <div class="bg-brand-50 p-3 rounded-xl border-2 border-brand-200 text-xs">
+                                <span class="text-[9px] font-black text-brand-600 uppercase block mb-1">Tingkat Risiko Malnutrisi:</span>
+                                <strong id="nutrition-risk-level" class="text-slate-950 uppercase font-black">Sedang</strong>
+                            </div>
+                            <p class="text-xs text-slate-950 font-bold leading-relaxed" id="nutrition-advice-text">
+                                Silakan mengonsumsi makanan yang bertekstur halus dan bersuhu sejuk untuk meminimalkan nyeri gesek pada lidah yang terjangkit thrush. Penuhi asupan makronutrisi protein tinggi.
+                            </p>
+
+                            <!-- Nutritional Prevention Protocol Block -->
+                            <div class="bg-orange-50 p-3.5 rounded-xl border-2 border-brand-300 space-y-2">
+                                <h5 class="text-xs font-black text-brand-700 uppercase flex items-center gap-1"><i data-lucide="heart-pulse" class="w-4 h-4"></i> Protokol Gizi Preventif</h5>
+                                <ul class="list-disc pl-4 text-[10px] text-slate-950 space-y-1 font-bold">
+                                    <li><strong>Modifikasi Tekstur Makanan:</strong> Konsumsi bubur lembut atau sediaan pure buah dingin guna meminimalisir luka robekan mikro pada plak candida lidah.</li>
+                                    <li><strong>Imunoprotein Seluler:</strong> Tingkatkan asupan omega-3 dan protein hewani (putih telur, ikan) untuk merangsang sintesis sel epitelium mukosa mulut.</li>
+                                    <li><strong>Optimalisasi pH Saliva:</strong> Hindari konsumsi susu manis berlebih sebelum tidur yang berisiko tertinggal di celah gusi dan merangsang keasaman mulut.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature 8: TB Recovery Prediction Index -->
+        <section id="prediction" class="py-16 bg-brand-50/20 border-t-2 border-brand-100">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6">
+                <div class="text-center mb-12">
+                    <span class="bg-brand-100 border-2 border-brand-200 text-brand-700 text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider">
+                        Fitur 8 • Integrated Clinical Prognosis
+                    </span>
+                    <h2 class="text-3xl font-black text-brand-950 mt-4 uppercase">TB Recovery Prediction Index</h2>
+                    <p class="text-slate-950 mt-2 text-xs sm:text-sm font-bold">
+                        Sistem memproyeksikan indeks peluang keberhasilan terapi penyembuhan tuberkulosis Anda dengan menggabungkan tingkat kepatuhan minum OAT, risiko oral thrush, dan status nutrisi harian.
+                    </p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-6 sm:p-10 border-2 border-brand-200 bg-white shadow-xl space-y-6 text-center">
+                    <button onclick="calculateRecoveryIndex()" class="bg-gradient-to-r from-brand-600 to-phyto-500 hover:from-brand-700 hover:to-phyto-600 text-white font-black uppercase text-xs tracking-widest px-8 py-3.5 rounded-xl shadow-md transition-all">
+                        Simulasikan Peluang Keberhasilan Penyembuhan TB
+                    </button>
+
+                    <div id="recovery-result-panel" class="hidden space-y-4 pt-4 border-t-2 border-brand-100">
+                        <div class="max-w-xs mx-auto">
+                            <span class="text-[9px] font-black uppercase tracking-widest text-brand-600 block mb-1">Indeks Peluang Sembuh</span>
+                            <div class="text-4xl font-black text-slate-950" id="recovery-score-display">0%</div>
+                            <span id="recovery-status-badge" class="text-[10px] font-black px-2.5 py-0.5 rounded-full text-white bg-slate-400 uppercase block mt-1.5 w-fit mx-auto">Rendah</span>
+                        </div>
+                        <p class="text-xs text-slate-950 font-bold leading-relaxed max-w-md mx-auto" id="recovery-desc-text">
+                            Tingkatkan kepatuhan penggunaan inhaler dan phytomouthwash Mucoshield-TB Anda untuk menaikkan skor peluang kesembuhan paru Anda secara optimal.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature 9: Community Health Monitoring -->
+        <section id="community" class="py-16 bg-white border-t-2 border-brand-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <span class="bg-brand-100 border-2 border-brand-200 text-brand-700 text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider">
+                        Fitur 9 • Puskesmas Dashboard Monitoring
+                    </span>
+                    <h2 class="text-3xl font-black text-brand-950 mt-4 uppercase">Community Health Monitoring</h2>
+                    <p class="text-slate-950 mt-2 text-xs sm:text-sm font-bold">
+                        Data pemantauan anonim pasien TBC dan oral thrush di wilayah setempat dikompilasi secara *real-time* untuk membantu petugas puskesmas dan fasilitas kesehatan merancang intervensi yang presisi.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <!-- Community Stats Panel -->
+                    <div class="lg:col-span-4 glass-card rounded-2xl p-6 border-2 border-brand-200 bg-white shadow-md space-y-4">
+                        <h3 class="font-black text-xs text-slate-950 uppercase flex items-center gap-1.5 pb-2 border-b-2 border-brand-100">
+                            <i data-lucide="bar-chart" class="text-brand-500"></i>
+                            Metrik Sebaran Wilayah
+                        </h3>
+                        <div class="space-y-3 text-xs">
+                            <div class="flex justify-between">
+                                <span class="text-brand-700 font-bold">Kasus Berisiko Tinggi Thrush</span>
+                                <strong class="text-danger-500 font-black">142 Pasien</strong>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-brand-700 font-bold">Total Kepatuhan Rata-rata</span>
+                                <strong class="text-brand-600 font-black">82.4%</strong>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-brand-700 font-bold">Pasien Terbebas Oral Thrush</span>
+                                <strong class="text-phyto-600 font-black">391 Pasien</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Healthy Community Support Pledge & Registration -->
+                    <div class="lg:col-span-4 glass-card rounded-2xl p-6 border-2 border-brand-200 bg-white shadow-md space-y-4">
+                        <h3 class="font-black text-xs text-slate-950 uppercase flex items-center gap-1.5 pb-2 border-b-2 border-brand-100">
+                            <i data-lucide="heart-handshake" class="text-brand-600"></i>
+                            Komunitas Sehat Tuntas TBC (KST-TBC)
+                        </h3>
+                        <p class="text-[10px] text-slate-950 font-bold leading-relaxed">
+                            Maju bersama menghadapi Tuberkulosis! Daftarkan diri Anda ke jejaring pendamping sebaya nasional untuk saling mendukung kesembuhan terapi parumu tanpa relaps.
+                        </p>
+                        
+                        <!-- Community Pledge Form -->
+                        <form onsubmit="submitCommunityPledge(event)" class="space-y-2.5">
+                            <input type="text" id="pledge-school" required placeholder="Nama Sekolah / Institusi..." class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-3 py-2 text-xs text-slate-950 font-black outline-none">
+                            <input type="text" id="pledge-vision" required placeholder="Slogan / Ikrar Semangatmu..." class="w-full bg-brand-50 border-2 border-brand-200 rounded-xl px-3 py-2 text-xs text-slate-950 font-black outline-none">
+                            <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-black text-[10px] uppercase py-2 rounded-xl transition-all">
+                                Kirim Ikrar & Bergabung Jejaring
+                            </button>
+                        </form>
+
+                        <!-- Community Pledge Card -->
+                        <div id="community-badge" class="hidden bg-gradient-to-tr from-brand-900 to-brand-950 text-white p-4 rounded-xl text-center space-y-2 border-2 border-brand-500 relative overflow-hidden">
+                            <span class="text-[8px] bg-brand-500 text-white font-black px-2 py-0.5 rounded-full uppercase tracking-widest block mx-auto w-fit">KST-TBC Terdaftar</span>
+                            <h4 id="pledge-card-name" class="font-black text-xs uppercase text-white"></h4>
+                            <p id="pledge-card-school" class="text-[9px] text-brand-100 font-black"></p>
+                            <p id="pledge-card-text" class="text-[9px] text-white italic font-bold"></p>
+                        </div>
+                    </div>
+
+                    <!-- Youtube Webinar & Podcast Hub -->
+                    <div class="lg:col-span-4 glass-card rounded-2xl p-6 border-2 border-brand-200 bg-white shadow-md space-y-4">
+                        <h3 class="font-black text-xs text-slate-950 uppercase flex items-center gap-1.5 pb-2 border-b-2 border-brand-100">
+                            <i data-lucide="video" class="text-brand-500 animate-pulse"></i>
+                            Webinar & Podcast Player
+                        </h3>
+                        
+                        <!-- Video simulator box -->
+                        <div class="bg-black text-white rounded-xl overflow-hidden aspect-video relative group border-2 border-brand-200">
+                            <img id="webinar-thumb" src="https://placehold.co/640x360/ea580c/ffffff?text=Webinar+Tuberkulosis+dan+Oral+Thrush" alt="Video" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-brand-950/40 flex flex-col justify-between p-3">
+                                <span class="bg-red-600 text-[8px] font-black px-2 py-0.5 rounded text-white w-fit">SIMULATOR YouTube</span>
+                                <button onclick="toggleWebinarSimulation()" class="w-10 h-10 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center mx-auto shadow-lg">
+                                    <i id="webinar-play-btn" data-lucide="play" class="w-5 h-5 fill-white"></i>
+                                </button>
+                                <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded truncate text-brand-100 font-black">Penatapan Higienitas Inhaler Tuberkulosis</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature 10: Smart Referral System -->
+        <section id="referrals" class="py-16 bg-brand-50/20 border-t-2 border-brand-100">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6">
+                <div class="text-center mb-12">
+                    <span class="bg-brand-100 border-2 border-brand-200 text-brand-700 text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider">
+                        Fitur 10 • Smart Clinical Referrals
+                    </span>
+                    <h2 class="text-3xl font-black text-brand-950 mt-4 uppercase">Smart Referral System</h2>
+                    <p class="text-slate-950 mt-2 text-xs sm:text-sm font-bold">
+                        Sistem rujukan pintar yang mendeteksi indikator kritis kesehatan pasien untuk menghasilkan rekomendasi rujukan faskes secara instan demi pencegahan komplikasi klinis.
+                    </p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-6 sm:p-10 border-2 border-brand-200 bg-white shadow-xl space-y-6">
+                    <button onclick="checkClinicalReferral()" class="w-full bg-gradient-to-r from-brand-600 to-phyto-500 hover:from-brand-700 hover:to-phyto-600 text-white font-black uppercase text-xs tracking-widest py-3.5 rounded-xl shadow-md transition-all">
+                        Periksa Status Rujukan Medis Saya
+                    </button>
+
+                    <div id="referral-output-panel" class="hidden space-y-4 pt-4 border-t-2 border-brand-100">
+                        <div class="flex items-center space-x-3 text-brand-950 pb-2 border-b-2 border-brand-100">
+                            <i data-lucide="file-text" class="w-6 h-6 text-brand-600"></i>
+                            <h3 class="font-black text-sm uppercase">Nota Rujukan Medis Terfasilitasi</h3>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                            <div class="bg-brand-50 p-3 rounded-xl border-2 border-brand-200">
+                                <span class="text-[9px] text-brand-600 uppercase block font-black">Status Rujukan</span>
+                                <strong id="ref-status" class="text-danger-500 font-black uppercase">Segera Hubungi Faskes</strong>
+                            </div>
+                            <div class="bg-brand-50 p-3 rounded-xl border-2 border-brand-200">
+                                <span class="text-[9px] text-brand-600 uppercase block font-black">Spesialis Rujukan Utama</span>
+                                <strong id="ref-target" class="text-brand-600 font-black uppercase">Dokter Paru / Dokter Gigi</strong>
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-slate-950 font-bold leading-relaxed" id="ref-desc">
+                            Berdasarkan tingkat keparahan plak lidah serta asupan nutrisi harian yang berada dalam kategori kritis, kami menganjurkan Anda untuk segera melakukan pemeriksaan formal ke Dokter Gigi Spesialis Penyakit Mulut atau Puskesmas mitra TBC terdekat.
+                        </p>
+                        
+                        <div class="flex justify-end pt-2">
+                            <button onclick="window.print()" class="bg-slate-950 hover:bg-slate-900 text-white text-[10px] font-black uppercase tracking-wider px-4 py-2 rounded-lg transition-all flex items-center gap-1.5">
+                                <i data-lucide="printer" class="w-4 h-4"></i> Cetak Surat Rujukan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-brand-950 text-brand-100 py-16 border-t-2 border-brand-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="md:col-span-2 space-y-4">
+                <div class="flex items-center space-x-2">
+                    <div class="bg-brand-500 text-white p-2 rounded-lg">
+                        <i data-lucide="droplet" class="w-5 h-5"></i>
+                    </div>
+                    <span class="font-black text-lg text-white">MUCOSHIELD<span class="text-brand-500">-TB</span></span>
+                </div>
+                <p class="text-xs text-brand-200 font-bold leading-relaxed max-w-sm">
+                    Inovasi sistem penapisan, monitoring kepatuhan, dan pendukung kesembuhan terapi TB nasional dengan mitigasi berbasis nanoenkapsulasi daun sembung dan daun sirih.
+                </p>
+            </div>
+            <div>
+                <h4 class="text-xs font-black text-white uppercase tracking-wider mb-4">Fitur Utama</h4>
+                <ul class="space-y-2 text-xs font-bold">
+                    <li><a href="#skrining" class="hover:text-phyto-400 transition-all text-brand-100">Skrining AI</a></li>
+                    <li><a href="#photo-scan" class="hover:text-phyto-400 transition-all text-brand-100">Photo Scan AI</a></li>
+                    <li><a href="#prediction" class="hover:text-phyto-400 transition-all text-brand-100">Prediksi Kepatuhan</a></li>
+                    <li><a href="#reminders" class="hover:text-phyto-400 transition-all text-brand-100">TB Reminders</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-xs font-black text-white uppercase tracking-wider mb-4">Bantuan Medis</h4>
+                <p class="text-xs text-brand-200 leading-relaxed font-bold">
+                    Tingkatkan kepatuhan terapi Anda. Hubungi faskes terdekat untuk penanganan klinis lebih lanjut.
+                </p>
+                <p class="text-sm text-phyto-500 font-black mt-2">119 (Darurat Medis)</p>
+            </div>
+        </div>
+
+        <!-- Comprehensive Medical Disclaimer Section -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-6 border-t-2 border-brand-900">
+            <div class="bg-brand-900/60 border-2 border-brand-800 rounded-2xl p-5 flex flex-col sm:flex-row items-start gap-4">
+                <div class="bg-brand-500/10 text-brand-400 p-2.5 rounded-xl shrink-0 mt-0.5">
+                    <i data-lucide="info" class="w-6 h-6"></i>
+                </div>
+                <div class="space-y-1">
+                    <h5 class="text-xs font-black uppercase tracking-wider text-brand-500 flex items-center gap-1.5">
+                        Pemberitahuan & Pembatasan Tanggung Jawab Medis (Medical Disclaimer)
+                    </h5>
+                    <p class="text-[11px] text-brand-200 leading-relaxed font-bold">
+                        Platform digital <strong>MUCOSHIELD-TB</strong> beserta produk biosuplemen/mouthwash yang diulas dirancang eksklusif sebagai sistem edukasi preventif awal dan penapisan parameter risiko kandidiasis mulut (*oral thrush*) secara mandiri. Platform ini <strong>tidak bertujuan menggantikan diagnosis medis profesional, pemeriksaan laboratorium klinis formal, perawatan paru formal, atau terapi penanganan Tuberkulosis dari dokter spesialis paru</strong>. Selalu konsultasikan segala bentuk keluhan efek samping obat inhaler steroid kepada faskes puskesmas atau praktisi klinis berwenang Anda.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 pt-6 border-t-2 border-brand-900 text-center text-[10px] text-brand-300">
+            &copy; 2026 MUCOSHIELD-TB Indonesia. Hak Cipta Dilindungi Undang-Undang. Mendukung Keberhasilan Terapi Tuberkulosis Bebas Oral Thrush.
+        </div>
+    </footer>
+
+    <!-- Script Operations Logic -->
+    <script>
+        // Init Lucide Icons
+        lucide.createIcons();
+
+        // Global User Profile State
+        let globalUser = {
+            name: "",
+            age: 0,
+            gender: "L",
+            region: "",
+            height: 0,
+            weight: 0,
+            tbHistory: "baru",
+            tbDuration: 0,
+            inhalerType: "ics",
+            diabetes: "tidak",
+            smoking: "tidak",
+            prevThrush: "tidak"
+        };
+
+        // Otentikasi Registration Form Handler
+        function handleRegistration(event) {
+            event.preventDefault();
+            
+            globalUser.name = document.getElementById('reg-name').value.trim();
+            globalUser.age = parseInt(document.getElementById('reg-age').value.trim());
+            globalUser.gender = document.getElementById('reg-gender').value;
+            globalUser.region = document.getElementById('reg-region').value.trim();
+            globalUser.height = parseInt(document.getElementById('reg-height').value.trim());
+            globalUser.weight = parseInt(document.getElementById('reg-weight').value.trim());
+            globalUser.tbHistory = document.getElementById('reg-tb-history').value;
+            globalUser.tbDuration = parseInt(document.getElementById('reg-tb-duration').value.trim());
+            globalUser.inhalerType = document.getElementById('reg-inhaler-type').value;
+            globalUser.diabetes = document.getElementById('reg-diabetes').value;
+            globalUser.smoking = document.getElementById('reg-smoking').value;
+            globalUser.prevThrush = document.getElementById('reg-prev-thrush').value;
+
+            // Update UI Badges
+            document.getElementById('registered-user-badge').textContent = `Profil: ${globalUser.name} (${globalUser.region})`;
+            document.getElementById('welcome-user-text').textContent = `Selamat Datang, ${globalUser.name} - Wilayah Terapi: ${globalUser.region}`;
+
+            // Dismiss gateway modal
+            document.getElementById('entry-gate-modal').classList.add('hidden');
+
+            // Send notification
+            showCustomNotification(`Profil ${globalUser.name} Terkonfigurasi dengan Sukses!`);
+        }
+
+        // Mobile Menu Navigation Controls
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Feature 1: AI Oral Thrush Risk Screening
+        function calculateAIThrushRisk() {
+            const inhaleFreq = parseInt(document.getElementById('scr-inhale-freq').value) || 0;
+            const gargleHabit = document.getElementById('scr-gargle-habit').value;
+            const inhaleDuration = document.getElementById('scr-inhale-duration').value;
+            const oralHygiene = document.getElementById('scr-oral-hygiene').value;
+            const steroidDosage = document.getElementById('scr-steroid-dosage').value;
+            const antibioticHistory = document.getElementById('scr-antibiotic-history').value;
+            const mouthBreathing = document.getElementById('scr-mouth-breathing').value;
+            const dentureUser = document.getElementById('scr-denture-user').value;
+            const hydration = document.getElementById('scr-hydration').value;
+            const sugarIntake = document.getElementById('scr-sugar-intake').value;
+
+            // Compute BMI
+            let heightM = globalUser.height / 100;
+            let bmi = (heightM > 0) ? (globalUser.weight / (heightM * heightM)) : 22;
+
+            // Expanded 10-Parameter Risk Weighting
+            let score = 15; // base risk score
+
+            // 1. Frekuensi Inhalasi
+            if (inhaleFreq > 2) score += 15;
+            else if (inhaleFreq > 0) score += 5;
+
+            // 2. Kebiasaan Berkumur
+            if (gargleHabit === 'jarang') score += 10;
+            else if (gargleHabit === 'tidak_pernah') score += 20;
+
+            // 3. Durasi Penggunaan Steroid
+            if (inhaleDuration === 'lama') score += 10;
+
+            // 4. Keterpeliharaan Higienitas
+            if (oralHygiene === 'kurang') score += 10;
+
+            // 5. Dosis Steroid
+            if (steroidDosage === 'tinggi') score += 15;
+            else if (steroidDosage === 'sedang') score += 8;
+
+            // 6. Terapi Antibiotik
+            if (antibioticHistory === 'ada') score += 10;
+
+            // 7. Kebiasaan Bernapas Lewat Mulut
+            if (mouthBreathing === 'ya') score += 8;
+
+            // 8. Penggunaan Gigi Tiruan / Behel
+            if (dentureUser === 'ya') score += 8;
+
+            // 9. Tingkat Hidrasi
+            if (hydration === 'kurang') score += 7;
+
+            // 10. Konsumsi Gula
+            if (sugarIntake === 'tinggi') score += 10;
+
+            // Integrasikan parameter sosiopsikosomatik dari data registrasi awal
+            if (globalUser.diabetes === 'ada') score += 10;
+            if (bmi < 18.5) score += 10; // Kekurangan gizi memperlemah imunitas seluler
+            if (globalUser.prevThrush === 'pernah') score += 10;
+            if (globalUser.smoking === 'aktif') score += 5;
+
+            score = Math.min(score, 100);
+
+            let riskCategory = "Rendah";
+            let colorClass = "bg-phyto-500";
+            if (score >= 70) {
+                riskCategory = "Tinggi";
+                colorClass = "bg-danger-500";
+            } else if (score >= 40) {
+                riskCategory = "Sedang";
+                colorClass = "bg-warning-500";
+            }
+
+            document.getElementById('risk-score-value').textContent = `${score}%`;
+            const badge = document.getElementById('risk-level-badge');
+            badge.textContent = riskCategory;
+            badge.className = `text-[9px] font-black px-2 py-0.5 rounded-full text-white ${colorClass} uppercase`;
+
+            let desc = `Berdasarkan 10 parameter klinis adaptif, Anda teridentifikasi berada dalam kategori risiko ${riskCategory.toUpperCase()}. `;
+            if (riskCategory === 'Tinggi') {
+                desc += `Faktor pemicu utama Anda adalah tingginya paparan residu kortikosteroid sisa hirup di lidah yang diperparah oleh potensi disbiosis mikroba mulut akibat antibiotik, mulut kering, atau asupan glukosa tinggi. Spora Candida albicans bermutasi agresif menjadi hifa invasif pada kondisi ini.`;
+            } else if (riskCategory === 'Sedang') {
+                desc += `Ditemukan beberapa indikator kerentanan moderat yang saling tumpang tindih. Kurangi makanan manis, perbanyak minum air putih untuk merangsang sirkulasi saliva alami, dan mulailah menggunakan phytomouthwash secara teratur.`;
+            } else {
+                desc += `Selamat! Sistem proteksi mikroflora mulut Anda berjalan sangat baik. Pertahankan kebiasaan berkumur sehat ini guna melindung mukosa mulut dari kolonisasi jamur patogen.`;
+            }
+
+            document.getElementById('risk-desc-text').textContent = desc;
+
+            // Inject AI Screening Preventive Protocols
+            let protocols = `
+                <h5 class="text-xs font-black text-brand-700 uppercase flex items-center gap-1"><i data-lucide="shield-check" class="w-4 h-4"></i> Protokol Pencegahan Khusus</h5>
+                <ul class="list-disc pl-4 text-[10px] text-slate-950 font-bold space-y-1">
+            `;
+            if (riskCategory === 'Tinggi' || riskCategory === 'Sedang') {
+                protocols += `
+                    <li><strong>Gunakan Alat Bantu Spacer:</strong> Selalu hubungkan inhaler MDI Anda dengan *spacer*. Alat penahan ini memotong tumbukan steroid langsung ke langit-langit lidah Anda hingga 80%.</li>
+                    <li><strong>Teknik Double Gargle:</strong> Kumur pertama secara menyeluruh di sela-sela gigi dan gusi untuk membilas sisa steroid mekanis, lalu dongakkan kepala ke belakang (*gargle*) selama 30 detik pada bilasan kedua dengan Mucoshield-TB.</li>
+                    <li><strong>Sterilisasi Mouthpiece Inhaler:</strong> Bersihkan corong inhaler secara fisik dengan air mengalir hangat seminggu sekali untuk mencegah biofilm jamur berkembang biak.</li>
+                `;
+            } else {
+                protocols += `
+                    <li><strong>Rutinitas Preventif:</strong> Cukup pertahankan berkumur dengan air bersih pasca inhalasi dan rutinkan bersikat gigi 2 kali sehari secara disiplin.</li>
+                `;
+            }
+            protocols += `</ul>`;
+            document.getElementById('scr-preventive-panel').innerHTML = protocols;
+
+            document.getElementById('thrush-risk-placeholder').classList.add('hidden');
+            document.getElementById('thrush-risk-result').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        // Feature 2: pH Indicator Simulator
+        let currentTargetPH = 7.0;
+
+        // Visual pH trigger updater
+        function updatePHSimulationValue(val) {
+            currentTargetPH = parseFloat(val);
+            document.getElementById('ph-display-val').textContent = currentTargetPH.toFixed(1);
+        }
+
+        // Drop animation synthesizer
+        function triggerPHChemicalAnimation() {
+            const droplet = document.getElementById('saliva-droplet');
+            const ripple = document.getElementById('ph-beaker-ripple');
+            const beakerFluid = document.getElementById('ph-liquid-beaker');
+            const title = document.getElementById('ph-status-title');
+            const desc = document.getElementById('ph-status-desc');
+
+            // Play droplet fall animation
+            droplet.style.transform = 'translate(-50%, 0)';
+            droplet.classList.remove('hidden');
+            
+            // Slide droplet down over 800ms
+            setTimeout(() => {
+                droplet.style.transform = 'translate(-50%, 80px)';
+                droplet.style.opacity = '0';
+            }, 50);
+
+            // Trigger ripple and change beaker fluid color when droplet hits fluid (800ms)
+            setTimeout(() => {
+                droplet.classList.add('hidden');
+                droplet.style.transform = 'translate(-50%, 0)';
+                droplet.style.opacity = '1';
+                
+                // Show ripple effect
+                ripple.classList.remove('hidden');
+                setTimeout(() => ripple.classList.add('hidden'), 500);
+
+                // Morph beaker background class based on target pH
+                if (currentTargetPH < 5.5) {
+                    beakerFluid.className = "w-full h-[65%] bg-red-500 transition-all duration-1000 ease-in-out relative";
+                    title.textContent = "Status: Bahaya / Risiko Tinggi (pH < 5.5)";
+                    title.className = "font-black text-xs uppercase text-danger-500";
+                    desc.textContent = "pH saliva bersifat asam ekstrem akibat fermentasi gula/deposisi steroid. Lingkungan ini memicu percepatan mutasi hifa Candida albicans secara agresif.";
+                } else if (currentTargetPH < 6.5) {
+                    beakerFluid.className = "w-full h-[65%] bg-amber-500 transition-all duration-1000 ease-in-out relative";
+                    title.textContent = "Status: Waspada (pH 5.5 - 6.4)";
+                    title.className = "font-black text-xs uppercase text-warning-500";
+                    desc.textContent = "pH saliva mulai menurun dari kondisi normal. Lakukan kumur secepatnya menggunakan phytomouthwash Mucoshield-TB untuk menetralisir tingkat asam.";
+                } else {
+                    beakerFluid.className = "w-full h-[65%] bg-emerald-500 transition-all duration-1000 ease-in-out relative";
+                    title.textContent = "Status: Aman (pH 6.5 - 8.0)";
+                    title.className = "font-black text-xs uppercase text-phyto-600";
+                    desc.textContent = "pH rongga mulut seimbang dan sehat. Proliferasi jamur terkendali optimal di bawah dukungan antibakteri Blumea balsamifera.";
+                }
+
+                showCustomNotification(`Reaksi Kimia Saliva Selesai. Hasil pH terdeteksi: ${currentTargetPH.toFixed(1)}`);
+            }, 800);
+        }
+
+        // Feature 3: Oral Thrush Self-Assessment
+        function calculateSelfAssessment(event) {
+            event.preventDefault();
+            const q1 = parseInt(document.getElementById('assess-q1').value);
+            const q2 = parseInt(document.getElementById('assess-q2').value);
+            const q3 = parseInt(document.getElementById('assess-q3').value);
+            const q4 = parseInt(document.getElementById('assess-q4').value);
+            const q5 = parseInt(document.getElementById('assess-q5').value);
+            const q6 = parseInt(document.getElementById('assess-q6').value);
+            const q7 = parseInt(document.getElementById('assess-q7').value);
+            const q8 = parseInt(document.getElementById('assess-q8').value);
+            const q9 = parseInt(document.getElementById('assess-q9').value);
+            const q10 = parseInt(document.getElementById('assess-q10').value);
+
+            const totalScore = q1 + q2 + q3 + q4 + q5 + q6 + q7 + q8 + q9 + q10;
+
+            let badgeText = "Aman";
+            let colorClass = "bg-phyto-500";
+            let feedback = "Kondisi keluhan Anda sangat minim. Pertahankan higienitas mulut setelah pemakaian inhaler.";
+
+            if (totalScore >= 60) {
+                badgeText = "Sangat Kritis";
+                colorClass = "bg-red-600";
+                feedback = "Keluhan klinis Anda tergolong kritis! Kesulitan menelan berat, sariawan pecah-pecah (cheilitis), dan plak putih tebal berdarah mengindikasikan infeksi jamur telah meluas ke laring/tenggorokan.";
+            } else if (totalScore >= 25) {
+                badgeText = "Moderat";
+                colorClass = "bg-warning-500";
+                feedback = "Gejala moderat terdeteksi. Sariawan dan sensasi terbakar mulai mengganggu nafsu makan. Segera lakukan kumur secara teratur dengan Phytomouthwash Mucoshield-TB.";
+            }
+
+            const badgeNode = document.getElementById('self-assess-score-badge');
+            badgeNode.textContent = `${totalScore} Poin - ${badgeText}`;
+            badgeNode.className = `bg-white border text-xs font-black px-2 py-0.5 rounded-full ${colorClass} text-white`;
+
+            document.getElementById('self-assess-feedback-text').textContent = feedback;
+
+            // Inject Self-Assessment Preventive Protocols
+            let protocols = `
+                <h5 class="text-xs font-black text-brand-700 uppercase flex items-center gap-1"><i data-lucide="shield-check" class="w-4 h-4"></i> Protokol Tanggapan Klinis Dinamis</h5>
+                <ul class="list-disc pl-4 text-[10px] text-slate-950 font-bold space-y-1">
+            `;
+            if (totalScore >= 60) {
+                protocols += `
+                    <li><strong>Konsultasi Medis Segera:</strong> Penurunan fungsi menelan (*disfagia*) parah berisiko memicu aspirasi residu paru. Dapatkan resep obat antijamur sistemik (Nistatin oral) dari faskes terdekat.</li>
+                    <li><strong>Hindari Gesekan Mekanis Kasar:</strong> Jangan sekali-kali menyikat paksa plak putih di lidah karena dapat memicu luka berdarah terbuka yang memperparah invasi hifa jamur.</li>
+                `;
+            } else if (totalScore >= 25) {
+                protocols += `
+                    <li><strong>Optimalkan Mucoshield-TB:</strong> Rutinkan kumur 3-4 kali sehari pasca makan. Senyawa Kavibetol dalam daun sirih bekerja merusak struktur dinding sel Candida.</li>
+                    <li><strong>Gunakan Air Es/Suhu Dingin:</strong> Redakan sensasi terbakar mukosa dengan mengisap es batu bersih atau meminum air es dingin.</li>
+                `;
+            } else {
+                protocols += `
+                    <li><strong>Kumur Preventif:</strong> Cukup gunakan Mucoshield-TB 2 kali sehari sebagai sediaan sanitasi mulut preventif berkala.</li>
+                `;
+            }
+            protocols += `</ul>`;
+            document.getElementById('assess-preventive-panel').innerHTML = protocols;
+
+            document.getElementById('self-assess-result-panel').classList.remove('hidden');
+
+            // Auto-trigger reminder refresh
+            updateAdherenceScore();
+            lucide.createIcons();
+        }
+
+        // Feature 4: Smart Oral Photo Screening AI Simulation
+        let currentPhotoType = "sehat";
+
+        function selectPhotoSample(type) {
+            currentPhotoType = type;
+            const placeholder = document.getElementById('photo-scan-placeholder');
+            const outputBox = document.getElementById('photo-scan-output-box');
+            const img = document.getElementById('photo-scan-img');
+
+            placeholder.classList.add('hidden');
+            outputBox.classList.remove('hidden');
+
+            if (type === 'sehat') {
+                img.src = "https://placehold.co/600x400/eab308/ffffff?text=Lidah+Normal+dan+Sehat";
+            } else if (type === 'thrush') {
+                img.src = "https://placehold.co/600x400/ffedd5/ea580c?text=Lidah+Putih+Candidiasis+Oral";
+            } else {
+                img.src = "https://placehold.co/600x400/ef4444/ffffff?text=Radang+Mukosa+Sariawan+Thrush";
+            }
+            showCustomNotification(`Gambar sampel "${type.toUpperCase()}" terpilih.`);
+        }
+
+        function handlePhotoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('photo-scan-placeholder').classList.add('hidden');
+                document.getElementById('photo-scan-output-box').classList.remove('hidden');
+                document.getElementById('photo-scan-img').src = e.target.result;
+                currentPhotoType = "uploaded";
+                showCustomNotification("Foto lidah berhasil diunggah!");
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function executePhotoAIScan() {
+            const laser = document.getElementById('scan-laser-line');
+            laser.classList.remove('hidden');
+
+            showCustomNotification("Memulai Pemindaian Spora Jamur AI...");
+
+            setTimeout(() => {
+                laser.classList.add('hidden');
+                
+                const plaqueNode = document.getElementById('photo-res-plaque');
+                const inflamNode = document.getElementById('photo-res-inflam');
+
+                if (currentPhotoType === 'sehat') {
+                    plaqueNode.textContent = "Tidak Terdeteksi (5%)";
+                    plaqueNode.className = "text-phyto-600 font-black";
+                    inflamNode.textContent = "Normal (12%)";
+                    inflamNode.className = "text-phyto-600 font-black";
+                } else if (currentPhotoType === 'thrush') {
+                    plaqueNode.textContent = "Terdeteksi Sangat Tinggi (89%)";
+                    plaqueNode.className = "text-danger-500 font-black";
+                    inflamNode.textContent = "Inflamasi Tinggi (76%)";
+                    inflamNode.className = "text-danger-500 font-black";
+                } else {
+                    plaqueNode.textContent = "Sedikit Plak Tipis (35%)";
+                    plaqueNode.className = "text-warning-500 font-black";
+                    inflamNode.textContent = "Inflamasi Sedang (62%)";
+                    inflamNode.className = "text-warning-500 font-black";
+                }
+
+                showCustomNotification("Pemindaian AI Selesai!");
+            }, 2000);
+        }
+
+        // Warning Alarm System & Sound Synthesizer Logics
+        let alarmTimer = null;
+        
+        function playAlarmSound() {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+                
+                function beep(freq, duration, delay) {
+                    setTimeout(() => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.frequency.value = freq;
+                        osc.type = "sine";
+                        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
+                        osc.start();
+                        osc.stop(ctx.currentTime + duration);
+                    }, delay);
+                }
+                
+                // Double alert beep
+                beep(880, 0.15, 0);
+                beep(880, 0.15, 200);
+            } catch (e) {
+                console.log("Audio feedback interrupted", e);
+            }
+        }
+
+        function triggerWarningAlarm() {
+            document.getElementById('warning-alarm-modal').classList.remove('hidden');
+            showCustomNotification("🔔 Alarm Pengingat Terapi Aktif!");
+            
+            // Start looping audio alert
+            playAlarmSound();
+            if (alarmTimer) clearInterval(alarmTimer);
+            alarmTimer = setInterval(playAlarmSound, 1000);
+        }
+
+        function dismissWarningAlarm() {
+            document.getElementById('warning-alarm-modal').classList.add('hidden');
+            if (alarmTimer) {
+                clearInterval(alarmTimer);
+                alarmTimer = null;
+            }
+            showCustomNotification("✅ Terima kasih telah menjaga higienitas mulut Anda.");
+        }
+
+        // Feature 5 & 6: Adherence Score Calculation
+        function updateAdherenceScore() {
+            const checkOAT = document.getElementById('check-oat').checked;
+            const checkInhaler = document.getElementById('check-inhaler').checked;
+            const checkGargle = document.getElementById('check-gargle').checked;
+            const checkMonitor = document.getElementById('check-monitor').checked;
+
+            let activitiesDone = 0;
+            if (checkOAT) activitiesDone++;
+            if (checkInhaler) activitiesDone++;
+            if (checkGargle) activitiesDone++;
+            if (checkMonitor) activitiesDone++;
+
+            const score = Math.round((activitiesDone / 4) * 100);
+
+            // Update UI Score & Gauge
+            document.getElementById('adherence-score-val').textContent = `${score}%`;
+            
+            const offset = 251.2 - (251.2 * score) / 100;
+            const circle = document.getElementById('adherence-gauge-circle');
+            circle.setAttribute('stroke-dashoffset', offset);
+
+            const badge = document.getElementById('adherence-badge');
+            const feedbackMsg = document.getElementById('adherence-feedback-msg');
+
+            if (score === 100) {
+                badge.textContent = "Paripurna";
+                badge.className = "text-[8px] font-black px-2 py-0.5 rounded-full text-white bg-phyto-500 uppercase";
+                feedbackMsg.textContent = "Luar biasa! Seluruh terapi dan perlindungan oral thrush Anda hari ini berjalan 100% disiplin. Lanjutkan hingga masa pemulihan paru tercapai.";
+            } else if (score >= 50) {
+                badge.textContent = "Moderat";
+                badge.className = "text-[8px] font-black px-2 py-0.5 rounded-full text-white bg-warning-500 uppercase";
+                feedbackMsg.textContent = "Hati-hati, lewatnya konsumsi OAT atau lupa berkumur setelah inhaler dapat memperlemah sirkuit imunitas mulut serta resistensi kuman paru Anda.";
+            } else {
+                badge.textContent = "Sangat Rendah";
+                badge.className = "text-[8px] font-black px-2 py-0.5 rounded-full text-white bg-danger-500 uppercase";
+                feedbackMsg.textContent = "Kepatuhan di bawah standar minimum berisiko fatal memicu komplikasi infeksi jamur Candida sistemik dan kegagalan eliminasi kuman TBC.";
+            }
+        }
+
+        // Feature 7: Nutritional Assessment
+        function evaluateNutritionalRisk() {
+            const wtLoss = document.getElementById('nut-wt-loss').value;
+            const appetite = document.getElementById('nut-appetite').value;
+            const freq = document.getElementById('nut-freq').value;
+
+            let riskText = "Rendah";
+            let colorClass = "text-phyto-600";
+            let advice = "Status asupan nutrisi Anda normal. Pertahankan pola makan bergizi tinggi untuk menyokong metabolisme.";
+
+            if (wtLoss === 'banyak' || appetite === 'buruk') {
+                riskText = "Tinggi / Malnutrisi Parah";
+                colorClass = "text-danger-500";
+                advice = "Penurunan berat badan yang masif mengindikasikan sariawan oral thrush Anda merusak fungsi menelan makanan. Pilihlah makanan cair tinggi kalori dan protein (susu peptida, jus kental dingin) agar mudah dikonsumsi tanpa merangsang nyeri lidah.";
+            } else if (wtLoss === 'sedikit' || appetite === 'menurun' || freq === 'kurang') {
+                riskText = "Sedang";
+                colorClass = "text-warning-500";
+                advice = "Risiko malnutrisi sedang. Silakan menyiasatinya dengan mengonsumsi bubur lembut atau sayuran lunak bersuhu sejuk. Rutinkan kumur dengan Mucoshield-TB.";
+            }
+
+            document.getElementById('nutrition-risk-level').textContent = riskText;
+            document.getElementById('nutrition-risk-level').className = `font-black uppercase text-xs ${colorClass}`;
+            document.getElementById('nutrition-advice-text').textContent = advice;
+
+            document.getElementById('nutrition-result-placeholder').classList.add('hidden');
+            document.getElementById('nutrition-result-panel').classList.remove('hidden');
+        }
+
+        // Feature 8: TB Recovery Prediction Index
+        function calculateRecoveryIndex() {
+            // Compute based on simulation score states
+            let scoreVal = parseInt(document.getElementById('adherence-score-val').textContent) || 0;
+            let wtLoss = document.getElementById('nut-wt-loss').value;
+
+            let successPct = Math.round(scoreVal * 0.8);
+            if (wtLoss === 'tidak') successPct += 20;
+            successPct = Math.min(successPct, 98);
+
+            document.getElementById('recovery-score-display').textContent = `${successPct}%`;
+            
+            const badge = document.getElementById('recovery-status-badge');
+            const desc = document.getElementById('recovery-desc-text');
+
+            if (successPct >= 80) {
+                badge.textContent = "Sangat Tinggi";
+                badge.className = "text-[10px] font-black px-2.5 py-0.5 rounded-full text-white bg-phyto-500 uppercase block mt-1.5 w-fit mx-auto";
+                desc.textContent = "Selamat! Dengan indeks kepatuhan tinggi dan asupan nutrisi yang terpelihara, peluang kesembuhan paru dan mulut Anda berada dalam tingkat optimal.";
+            } else if (successPct >= 50) {
+                badge.textContent = "Sedang";
+                badge.className = "text-[10px] font-black px-2.5 py-0.5 rounded-full text-white bg-warning-500 uppercase block mt-1.5 w-fit mx-auto";
+                desc.textContent = "Peluang sedang. Tingkatkan kebiasaan berkumur menggunakan fitomouthwash nanoenkapsulasi untuk mencegah kolonisasi hifa jamur yang menyulitkan terapi.";
+            } else {
+                badge.textContent = "Sangat Rendah";
+                badge.className = "text-[10px] font-black px-2.5 py-0.5 rounded-full text-white bg-danger-500 uppercase block mt-1.5 w-fit mx-auto";
+                desc.textContent = "Sangat rendah. Kegagalan kepatuhan minum OAT memicu resistensi obat paru, diperparah kolonisasi Candida yang menyakitkan saat makan.";
+            }
+
+            document.getElementById('recovery-result-panel').classList.remove('hidden');
+        }
+
+        // Feature 9: Community & KST-TBC Pledge Submit
+        function submitCommunityPledge(event) {
+            event.preventDefault();
+            const school = document.getElementById('pledge-school').value.trim();
+            const vision = document.getElementById('pledge-vision').value.trim();
+            if (!school || !vision) return;
+
+            document.getElementById('pledge-card-name').textContent = globalUser.name.toUpperCase();
+            document.getElementById('pledge-card-school').textContent = `Sekolah: ${school} (${globalUser.region})`;
+            document.getElementById('pledge-card-text').textContent = `"${vision}"`;
+
+            document.getElementById('pledge-school').value = "";
+            document.getElementById('pledge-vision').value = "";
+            document.getElementById('community-badge').classList.remove('hidden');
+
+            showCustomNotification("Ikrar Komitmen Tuntas TBC Berhasil! Anda Tergabung di KST-TBC.");
+        }
+
+        // Feature 10: Referral System Check
+        function checkClinicalReferral() {
+            let scoreVal = parseInt(document.getElementById('adherence-score-val').textContent) || 0;
+            let wtLoss = document.getElementById('nut-wt-loss').value;
+
+            const statusNode = document.getElementById('ref-status');
+            const targetNode = document.getElementById('ref-target');
+            const descNode = document.getElementById('ref-desc');
+
+            if (wtLoss === 'banyak' || scoreVal < 50) {
+                statusNode.textContent = "Kritis / Segera Hubungi Dokter";
+                statusNode.className = "text-danger-500 font-black uppercase text-xs";
+                targetNode.textContent = "Dokter Spesialis Paru & Spesialis Penyakit Mulut";
+                descNode.textContent = `Peringatan! Berdasarkan parameter berat badan Anda yang menyusut drastis disertai dengan tingkat kepatuhan minum OAT / kumur yang berada di bawah standar (di bawah 50%), Anda memiliki indikasi kegagalan sirkuit penyerapan nutrisi akibat infeksi jamur Candida yang meluas. Mohon segera membawa lembar rujukan tercetak ini ke Puskesmas Mitra TBC terdekat untuk penanganan klinis komprehensif.`;
+            } else {
+                statusNode.textContent = "Status Terapi Terkontrol";
+                statusNode.className = "text-phyto-600 font-black uppercase text-xs";
+                targetNode.textContent = "Evaluasi Mandiri Rawat Jalan";
+                descNode.textContent = `Status kesehatan rongga mulut dan perkembangan terapi paru Anda terhitung aman dan dalam pantauan mandiri yang baik. Tetap gunakan phytomouthwash Mucoshield-TB setelah pemakaian sediaan hirup steroid Anda guna memastikan lingkungan oral terbebas dari keasaman mikroba jamur.`;
+            }
+
+            document.getElementById('referral-output-panel').classList.remove('hidden');
+            showCustomNotification("Nota Rujukan Tergenerate.");
+        }
+
+        // Custom Notification Toast
+        function showCustomNotification(message) {
+            const toast = document.createElement('div');
+            toast.className = "fixed bottom-5 right-5 z-50 glass-card border-2 border-brand-500 text-slate-950 text-xs font-black px-5 py-3.5 rounded-xl shadow-2xl flex items-center gap-2 animate-bounce bg-white";
+            toast.innerHTML = `<i data-lucide="sparkles" class="text-brand-500 w-4 h-4 flex-shrink-0"></i> <span>${message}</span>`;
+            document.body.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.remove();
+            }, 4000);
+        }
+
+        // Webinar Simulation
+        let isWebinarPlaying = false;
+        function toggleWebinarSimulation() {
+            const btn = document.getElementById('webinar-play-btn');
+            if (isWebinarPlaying) {
+                isWebinarPlaying = false;
+                btn.setAttribute('data-lucide', 'play');
+                showCustomNotification("Simulasi Webinar Dijeda.");
+            } else {
+                isWebinarPlaying = true;
+                btn.setAttribute('data-lucide', 'pause');
+                showCustomNotification("Memulai Webinar YouTube Tuberkulosis...");
+            }
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
